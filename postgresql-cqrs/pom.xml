@@ -56,17 +56,17 @@
         <dependency>
             <groupId>dk.cloudcreate.essentials.components</groupId>
             <artifactId>postgresql-distributed-fenced-lock</artifactId>
-            <version>${essentials-components.version}</version>
+            <version>${essentials.version}</version>
         </dependency>
         <dependency>
             <groupId>dk.cloudcreate.essentials.components</groupId>
             <artifactId>postgresql-queue</artifactId>
-            <version>${essentials-components.version}</version>
+            <version>${essentials.version}</version>
         </dependency>
         <dependency>
             <groupId>dk.cloudcreate.essentials.components</groupId>
             <artifactId>spring-postgresql-event-store</artifactId>
-            <version>${essentials-components.version}</version>
+            <version>${essentials.version}</version>
         </dependency>
         <dependency>
             <groupId>org.objenesis</groupId>

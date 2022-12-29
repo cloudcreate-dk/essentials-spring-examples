@@ -34,28 +34,8 @@
 
     <dependencies>
         <dependency>
-            <groupId>dk.cloudcreate.essentials</groupId>
-            <artifactId>types-jackson</artifactId>
-            <version>${essentials.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>dk.cloudcreate.essentials</groupId>
-            <artifactId>immutable-jackson</artifactId>
-            <version>${essentials.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>dk.cloudcreate.essentials</groupId>
-            <artifactId>types-jdbi</artifactId>
-            <version>${essentials.version}</version>
-        </dependency>
-        <dependency>
             <groupId>dk.cloudcreate.essentials.components</groupId>
-            <artifactId>postgresql-distributed-fenced-lock</artifactId>
-            <version>${essentials.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>dk.cloudcreate.essentials.components</groupId>
-            <artifactId>postgresql-queue</artifactId>
+            <artifactId>spring-boot-starter-postgresql</artifactId>
             <version>${essentials.version}</version>
         </dependency>
         <dependency>

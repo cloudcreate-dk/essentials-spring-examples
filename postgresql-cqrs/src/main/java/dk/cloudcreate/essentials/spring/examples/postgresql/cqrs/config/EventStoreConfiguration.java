@@ -16,14 +16,9 @@
 
 package dk.cloudcreate.essentials.spring.examples.postgresql.cqrs.config;
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.databind.*;
-import com.fasterxml.jackson.databind.json.JsonMapper;
-import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import dk.cloudcreate.essentials.components.eventsourced.eventstore.postgresql.*;
 import dk.cloudcreate.essentials.components.eventsourced.eventstore.postgresql.bus.*;
-import dk.cloudcreate.essentials.components.eventsourced.eventstore.postgresql.command.UnitOfWorkControllingCommandBusInterceptor;
 import dk.cloudcreate.essentials.components.eventsourced.eventstore.postgresql.eventstream.*;
 import dk.cloudcreate.essentials.components.eventsourced.eventstore.postgresql.gap.PostgresqlEventStreamGapHandler;
 import dk.cloudcreate.essentials.components.eventsourced.eventstore.postgresql.persistence.*;
@@ -33,12 +28,7 @@ import dk.cloudcreate.essentials.components.eventsourced.eventstore.postgresql.s
 import dk.cloudcreate.essentials.components.eventsourced.eventstore.postgresql.transaction.*;
 import dk.cloudcreate.essentials.components.eventsourced.eventstore.postgresql.types.EventTypeOrName;
 import dk.cloudcreate.essentials.components.foundation.fencedlock.FencedLockManager;
-import dk.cloudcreate.essentials.components.foundation.transaction.*;
-import dk.cloudcreate.essentials.jackson.immutable.EssentialsImmutableJacksonModule;
-import dk.cloudcreate.essentials.jackson.types.EssentialTypesJacksonModule;
-import dk.cloudcreate.essentials.reactive.LocalEventBus;
-import dk.cloudcreate.essentials.reactive.command.LocalCommandBus;
-import dk.cloudcreate.essentials.reactive.spring.ReactiveHandlersBeanPostProcessor;
+import dk.cloudcreate.essentials.components.foundation.transaction.UnitOfWork;
 import lombok.extern.slf4j.Slf4j;
 import org.jdbi.v3.core.Jdbi;
 import org.springframework.context.annotation.*;
@@ -48,31 +38,20 @@ import java.time.Duration;
 import java.util.Optional;
 
 import static dk.cloudcreate.essentials.components.eventsourced.eventstore.postgresql.persistence.table_per_aggregate_type.SeparateTablePerAggregateTypeEventStreamConfigurationFactory.standardSingleTenantConfigurationUsingJackson;
-import static dk.cloudcreate.essentials.shared.MessageFormatter.msg;
 
 @Slf4j
 @Configuration
 public class EventStoreConfiguration {
-    @Bean
-    public ReactiveHandlersBeanPostProcessor reactiveHandlersBeanPostProcessor() {
-        return new ReactiveHandlersBeanPostProcessor();
-    }
 
     /**
-     * The {@link LocalEventBus} responsible for publishing {@link PersistedEvents} locally - this is used by the {@link EventStoreLocalEventBus}
+     * The Local EventBus where the {@link EventStore} publishes {@link PersistedEvents} locally
      *
-     * @return the {@link LocalEventBus} responsible for publishing {@link PersistedEvents} locally
+     * @param eventStoreUnitOfWorkFactory the {@link EventStoreUnitOfWorkFactory} that is required for the {@link EventStore} in order handle events associated with a given transaction
+     * @return the {@link EventStoreEventBus}
      */
     @Bean
-    public LocalEventBus<PersistedEvents> persistedEventsEventBus() {
-        return new LocalEventBus<>("PersistedEvents-EventBus",
-                                   3,
-                                   (failingSubscriber, event, exception) -> log.error(msg("Error for '{}' handling {}", failingSubscriber, event), exception));
-    }
-
-    @Bean
-    public LocalCommandBus localCommandBus(UnitOfWorkFactory<? extends UnitOfWork> unitOfWorkFactory) {
-        return new LocalCommandBus(new UnitOfWorkControllingCommandBusInterceptor(unitOfWorkFactory));
+    public EventStoreEventBus eventStoreLocalEventBus(EventStoreUnitOfWorkFactory<? extends EventStoreUnitOfWork> eventStoreUnitOfWorkFactory) {
+        return new EventStoreEventBus(eventStoreUnitOfWorkFactory);
     }
 
     /**
@@ -125,37 +104,23 @@ public class EventStoreConfiguration {
     /**
      * Setup the strategy for how {@link AggregateType} event-streams should be persisted.
      *
-     * @param jdbi                   the jdbi instance
-     * @param unitOfWorkFactory      the {@link EventStoreUnitOfWorkFactory}
-     * @param persistableEventMapper the mapper from the raw Java Event's to {@link PersistableEvent}<br>
-     * @param eventStoreObjectMapper {@link ObjectMapper} responsible for serializing/deserializing the raw Java events to and from JSON
+     * @param jdbi                            the jdbi instance
+     * @param unitOfWorkFactory               the {@link EventStoreUnitOfWorkFactory}
+     * @param persistableEventMapper          the mapper from the raw Java Event's to {@link PersistableEvent}<br>
+     * @param essentialComponentsObjectMapper {@link ObjectMapper} responsible for serializing/deserializing the raw Java events to and from JSON
      * @return the strategy for how {@link AggregateType} event-streams should be persisted
      */
     @Bean
     public SeparateTablePerAggregateTypePersistenceStrategy eventStorePersistenceStrategy(Jdbi jdbi,
                                                                                           EventStoreUnitOfWorkFactory<? extends EventStoreUnitOfWork> unitOfWorkFactory,
                                                                                           PersistableEventMapper persistableEventMapper,
-                                                                                          ObjectMapper eventStoreObjectMapper) {
+                                                                                          ObjectMapper essentialComponentsObjectMapper) {
         return new SeparateTablePerAggregateTypePersistenceStrategy(jdbi,
                                                                     unitOfWorkFactory,
                                                                     persistableEventMapper,
-                                                                    standardSingleTenantConfigurationUsingJackson(eventStoreObjectMapper,
+                                                                    standardSingleTenantConfigurationUsingJackson(essentialComponentsObjectMapper,
                                                                                                                   IdentifierColumnType.UUID,
                                                                                                                   JSONColumnType.JSONB));
-    }
-
-    /**
-     * The Local EventBus where the {@link EventStore} publishes persisted event
-     *
-     * @param persistedEventsEventBus     The {@link LocalEventBus} responsible for publishing {@link PersistedEvents} locally
-     * @param eventStoreUnitOfWorkFactory the {@link EventStoreUnitOfWorkFactory} that is required for the {@link EventStore} in order handle events associated with a given transaction
-     * @return the {@link EventStoreLocalEventBus}
-     */
-    @Bean
-    public EventStoreLocalEventBus eventStoreLocalEventBus(LocalEventBus<PersistedEvents> persistedEventsEventBus,
-                                                           EventStoreUnitOfWorkFactory<? extends EventStoreUnitOfWork> eventStoreUnitOfWorkFactory) {
-        return new EventStoreLocalEventBus(persistedEventsEventBus,
-                                           eventStoreUnitOfWorkFactory);
     }
 
     /**
@@ -169,43 +134,11 @@ public class EventStoreConfiguration {
     @Bean
     public ConfigurableEventStore<SeparateTablePerAggregateEventStreamConfiguration> eventStore(EventStoreUnitOfWorkFactory<? extends EventStoreUnitOfWork> eventStoreUnitOfWorkFactory,
                                                                                                 SeparateTablePerAggregateTypePersistenceStrategy persistenceStrategy,
-                                                                                                EventStoreLocalEventBus eventStoreLocalEventBus) {
+                                                                                                EventStoreEventBus eventStoreLocalEventBus) {
         return new PostgresqlEventStore<>(eventStoreUnitOfWorkFactory,
                                           persistenceStrategy,
                                           Optional.of(eventStoreLocalEventBus),
                                           eventStore -> new PostgresqlEventStreamGapHandler<>(eventStore, eventStoreUnitOfWorkFactory));
 
-    }
-
-    /**
-     * {@link ObjectMapper} responsible for serializing/deserializing the raw Java events to and from JSON
-     *
-     * @return the {@link ObjectMapper} responsible for serializing/deserializing the raw Java events to and from JSON
-     */
-    @Bean
-    public ObjectMapper eventStoreObjectMapper() {
-        var objectMapper = JsonMapper.builder()
-                                     .disable(MapperFeature.AUTO_DETECT_GETTERS)
-                                     .disable(MapperFeature.AUTO_DETECT_IS_GETTERS)
-                                     .disable(MapperFeature.AUTO_DETECT_SETTERS)
-                                     .disable(MapperFeature.DEFAULT_VIEW_INCLUSION)
-                                     .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
-                                     .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
-                                     .disable(SerializationFeature.FAIL_ON_EMPTY_BEANS)
-                                     .enable(MapperFeature.AUTO_DETECT_CREATORS)
-                                     .enable(MapperFeature.AUTO_DETECT_FIELDS)
-                                     .enable(MapperFeature.PROPAGATE_TRANSIENT_MARKER)
-                                     .addModule(new Jdk8Module())
-                                     .addModule(new JavaTimeModule())
-                                     .addModule(new EssentialTypesJacksonModule())
-                                     .addModule(new EssentialsImmutableJacksonModule())
-                                     .build();
-
-        objectMapper.setVisibility(objectMapper.getSerializationConfig().getDefaultVisibilityChecker()
-                                               .withGetterVisibility(JsonAutoDetect.Visibility.NONE)
-                                               .withSetterVisibility(JsonAutoDetect.Visibility.NONE)
-                                               .withFieldVisibility(JsonAutoDetect.Visibility.ANY)
-                                               .withCreatorVisibility(JsonAutoDetect.Visibility.ANY));
-        return objectMapper;
     }
 }

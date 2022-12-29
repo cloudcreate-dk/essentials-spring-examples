@@ -61,7 +61,7 @@ public class AccountsIT {
     private Accounts accounts;
 
     @Autowired
-    private EventStoreLocalEventBus eventStoreEventBus;
+    private EventStoreEventBus eventStoreEventBus;
 
     @Autowired
     private UnitOfWorkFactory<? extends UnitOfWork> unitOfWorkFactory;

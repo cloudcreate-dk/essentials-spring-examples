@@ -44,13 +44,13 @@ import static dk.cloudcreate.essentials.shared.MessageFormatter.msg;
 public class TransferMoneyProcessor extends AnnotatedCommandHandler {
     private final Accounts                                                    accounts;
     private final IntraBankMoneyTransfers                                     intraBankMoneyTransfers;
-    private final LocalCommandBus                                             commandBus;
+    private final CommandBus                                             commandBus;
     private final EventStoreUnitOfWorkFactory<? extends EventStoreUnitOfWork> unitOfWorkFactory;
     private final Outbox<Object>                                              moneyTransferEventsOutbox;
 
     public TransferMoneyProcessor(@NonNull Accounts accounts,
                                   @NonNull IntraBankMoneyTransfers intraBankMoneyTransfers,
-                                  @NonNull LocalCommandBus commandBus,
+                                  @NonNull CommandBus commandBus,
                                   @NonNull EventStoreSubscriptionManager eventStoreSubscriptionManager,
                                   @NonNull EventStoreUnitOfWorkFactory<? extends EventStoreUnitOfWork> unitOfWorkFactory,
                                   @NonNull Outboxes outboxes) {
@@ -60,7 +60,7 @@ public class TransferMoneyProcessor extends AnnotatedCommandHandler {
         this.unitOfWorkFactory = unitOfWorkFactory;
         this.moneyTransferEventsOutbox = outboxes.getOrCreateForwardingOutbox(OutboxConfig.builder()
                                                                                           .setOutboxName(OutboxName.of("MoneyTransfer - Lifecycle"))
-                                                                                          .setMessageConsumptionMode(MessageConsumptionMode.CompetingConsumers)
+                                                                                          .setMessageConsumptionMode(MessageConsumptionMode.GlobalCompetingConsumers)
                                                                                           .setNumberOfParallelMessageConsumers(1)
                                                                                           .setRedeliveryPolicy(RedeliveryPolicy.fixedBackoff(Duration.ofMillis(500), 10))
                                                                                           .build(),

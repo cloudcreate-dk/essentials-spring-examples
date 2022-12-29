@@ -16,7 +16,7 @@
 
 package dk.cloudcreate.essentials.spring.examples.postgresql.cqrs.shipping;
 
-import dk.cloudcreate.essentials.reactive.command.LocalCommandBus;
+import dk.cloudcreate.essentials.reactive.command.CommandBus;
 import dk.cloudcreate.essentials.spring.examples.postgresql.cqrs.shipping.adapters.kafka.incoming.*;
 import dk.cloudcreate.essentials.spring.examples.postgresql.cqrs.shipping.adapters.kafka.outgoing.*;
 import dk.cloudcreate.essentials.spring.examples.postgresql.cqrs.shipping.commands.RegisterShippingOrder;
@@ -29,6 +29,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.kafka.core.*;
 import org.springframework.kafka.listener.*;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.*;
 import org.testcontainers.containers.*;
 import org.testcontainers.junit.jupiter.Container;
@@ -43,6 +44,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @Testcontainers
+@DirtiesContext
 public class OrderShippingProcessorIT {
     private static final Logger log = LoggerFactory.getLogger(OrderShippingProcessorIT.class);
 
@@ -73,7 +75,7 @@ public class OrderShippingProcessorIT {
     private OrderEventsKafkaListener orderEventsKafkaListener;
 
     @Autowired
-    private LocalCommandBus commandBus;
+    private CommandBus commandBus;
 
     @Autowired
     ConsumerFactory<String, Object> kafkaConsumerFactory;

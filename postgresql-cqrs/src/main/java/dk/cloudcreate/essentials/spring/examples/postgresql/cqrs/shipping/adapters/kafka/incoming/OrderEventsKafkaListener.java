@@ -16,9 +16,8 @@
 
 package dk.cloudcreate.essentials.spring.examples.postgresql.cqrs.shipping.adapters.kafka.incoming;
 
-import dk.cloudcreate.essentials.components.foundation.messaging.RedeliveryPolicy;
-import dk.cloudcreate.essentials.components.foundation.messaging.eip.store_and_forward.*;
-import dk.cloudcreate.essentials.reactive.command.LocalCommandBus;
+import dk.cloudcreate.essentials.components.foundation.messaging.eip.store_and_forward.Inboxes;
+import dk.cloudcreate.essentials.reactive.command.CommandBus;
 import dk.cloudcreate.essentials.spring.examples.postgresql.cqrs.shipping.commands.ShipOrder;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
@@ -26,26 +25,27 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.Duration;
-
 @Service
 @Slf4j
 public class OrderEventsKafkaListener {
     public static final String ORDER_EVENTS_TOPIC_NAME = "order-events";
 
-    private final Inbox<ShipOrder> orderEventsInbox;
+    private final CommandBus commandBus;
 
     public OrderEventsKafkaListener(@NonNull Inboxes inboxes,
-                                    @NonNull LocalCommandBus commandBus) {
+                                    @NonNull CommandBus commandBus) {
         // Setup the Inbox to forward messages to the commandBus
-        orderEventsInbox = inboxes.getOrCreateInbox(InboxConfig.builder()
-                                                               .inboxName(InboxName.of("OrderService:OrderEvents"))
-                                                               .redeliveryPolicy(RedeliveryPolicy.fixedBackoff(Duration.ofMillis(100),
-                                                                                                               10))
-                                                               .messageConsumptionMode(MessageConsumptionMode.SingleGlobalConsumer)
-                                                               .numberOfParallelMessageConsumers(5)
-                                                               .build(),
-                                                    commandBus);
+//        orderEventsInbox = inboxes.getOrCreateInbox(InboxConfig.builder()
+//                                                               .inboxName(InboxName.of("OrderService:OrderEvents"))
+//                                                               .redeliveryPolicy(RedeliveryPolicy.fixedBackoff()
+//                                                                                                 .setRedeliveryDelay(Duration.ofMillis(100))
+//                                                                                                 .setMaximumNumberOfRedeliveries(10)
+//                                                                                                 .build())
+//                                                               .messageConsumptionMode(MessageConsumptionMode.SingleGlobalConsumer)
+//                                                               .numberOfParallelMessageConsumers(5)
+//                                                               .build(),
+//                                                    commandBus);
+        this.commandBus = commandBus;
     }
 
     @KafkaListener(topics = ORDER_EVENTS_TOPIC_NAME, groupId = "order-processing", containerFactory = "kafkaListenerContainerFactory")
@@ -57,7 +57,8 @@ public class OrderEventsKafkaListener {
                      ShipOrder.class.getSimpleName());
             // Since the method is annotated using @Transactional then orderEventsInbox.addMessageReceived can be called without an explicit unit of work
             // otherwise it would have to be wrapped in a unitOfWorkFactory.usingUnitOfWork(() -> orderEventsInbox.addMessageReceived(new ShipOrder(event.getId())));
-            orderEventsInbox.addMessageReceived(new ShipOrder(event.getId()));
+//            orderEventsInbox.addMessageReceived(new ShipOrder(event.getId()));
+            commandBus.sendAndDontWait(new ShipOrder(event.getId()));
         } else {
             log.debug("Ignoring {}: {}", event.getClass().getSimpleName(), event);
         }

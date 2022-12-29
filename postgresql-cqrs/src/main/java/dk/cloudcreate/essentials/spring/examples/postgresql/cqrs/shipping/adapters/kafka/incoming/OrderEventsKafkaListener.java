@@ -16,7 +16,6 @@
 
 package dk.cloudcreate.essentials.spring.examples.postgresql.cqrs.shipping.adapters.kafka.incoming;
 
-import dk.cloudcreate.essentials.components.foundation.messaging.eip.store_and_forward.Inboxes;
 import dk.cloudcreate.essentials.reactive.command.CommandBus;
 import dk.cloudcreate.essentials.spring.examples.postgresql.cqrs.shipping.commands.ShipOrder;
 import lombok.NonNull;
@@ -32,19 +31,7 @@ public class OrderEventsKafkaListener {
 
     private final CommandBus commandBus;
 
-    public OrderEventsKafkaListener(@NonNull Inboxes inboxes,
-                                    @NonNull CommandBus commandBus) {
-        // Setup the Inbox to forward messages to the commandBus
-//        orderEventsInbox = inboxes.getOrCreateInbox(InboxConfig.builder()
-//                                                               .inboxName(InboxName.of("OrderService:OrderEvents"))
-//                                                               .redeliveryPolicy(RedeliveryPolicy.fixedBackoff()
-//                                                                                                 .setRedeliveryDelay(Duration.ofMillis(100))
-//                                                                                                 .setMaximumNumberOfRedeliveries(10)
-//                                                                                                 .build())
-//                                                               .messageConsumptionMode(MessageConsumptionMode.SingleGlobalConsumer)
-//                                                               .numberOfParallelMessageConsumers(5)
-//                                                               .build(),
-//                                                    commandBus);
+    public OrderEventsKafkaListener(@NonNull CommandBus commandBus) {
         this.commandBus = commandBus;
     }
 
@@ -55,9 +42,6 @@ public class OrderEventsKafkaListener {
             log.info("*** Since Order '{}' is Accepted we can start Shipping the Order. Forwarding {} to CommandBus",
                      event.getId(),
                      ShipOrder.class.getSimpleName());
-            // Since the method is annotated using @Transactional then orderEventsInbox.addMessageReceived can be called without an explicit unit of work
-            // otherwise it would have to be wrapped in a unitOfWorkFactory.usingUnitOfWork(() -> orderEventsInbox.addMessageReceived(new ShipOrder(event.getId())));
-//            orderEventsInbox.addMessageReceived(new ShipOrder(event.getId()));
             commandBus.sendAndDontWait(new ShipOrder(event.getId()));
         } else {
             log.debug("Ignoring {}: {}", event.getClass().getSimpleName(), event);

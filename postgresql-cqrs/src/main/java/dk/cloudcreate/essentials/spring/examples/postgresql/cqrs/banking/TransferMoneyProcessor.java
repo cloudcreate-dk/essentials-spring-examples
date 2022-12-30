@@ -44,7 +44,7 @@ import static dk.cloudcreate.essentials.shared.MessageFormatter.msg;
 public class TransferMoneyProcessor extends AnnotatedCommandHandler {
     private final Accounts                                                    accounts;
     private final IntraBankMoneyTransfers                                     intraBankMoneyTransfers;
-    private final CommandBus                                             commandBus;
+    private final CommandBus                                                  commandBus;
     private final EventStoreUnitOfWorkFactory<? extends EventStoreUnitOfWork> unitOfWorkFactory;
     private final Outbox<Object>                                              moneyTransferEventsOutbox;
 

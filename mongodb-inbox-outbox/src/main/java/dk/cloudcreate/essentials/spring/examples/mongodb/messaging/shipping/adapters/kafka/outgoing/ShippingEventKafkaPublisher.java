@@ -14,17 +14,13 @@
  * limitations under the License.
  */
 
-package dk.cloudcreate.essentials.spring.examples.postgresql.cqrs.shipping.adapters.kafka.outgoing;
+package dk.cloudcreate.essentials.spring.examples.mongodb.messaging.shipping.adapters.kafka.outgoing;
 
-import dk.cloudcreate.essentials.components.eventsourced.eventstore.postgresql.eventstream.PersistedEvent;
-import dk.cloudcreate.essentials.components.eventsourced.eventstore.postgresql.subscription.*;
-import dk.cloudcreate.essentials.components.eventsourced.eventstore.postgresql.types.GlobalEventOrder;
 import dk.cloudcreate.essentials.components.foundation.messaging.RedeliveryPolicy;
 import dk.cloudcreate.essentials.components.foundation.messaging.eip.store_and_forward.*;
 import dk.cloudcreate.essentials.components.foundation.transaction.UnitOfWorkFactory;
-import dk.cloudcreate.essentials.components.foundation.types.SubscriberId;
-import dk.cloudcreate.essentials.spring.examples.postgresql.cqrs.shipping.domain.ShippingOrders;
-import dk.cloudcreate.essentials.spring.examples.postgresql.cqrs.shipping.domain.events.OrderShipped;
+import dk.cloudcreate.essentials.reactive.*;
+import dk.cloudcreate.essentials.spring.examples.mongodb.messaging.shipping.domain.events.OrderShipped;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.producer.ProducerRecord;
@@ -32,17 +28,21 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
-import java.util.Optional;
 
+/**
+ * This Service subscribes to the EventBus for ShippingOrder events synchronously within the Transaction that created the event.
+ * Any OrderShipped events are converted to ExternalOrderShipped event's and added to the Outbox, which durably and asynchronously forwards the
+ * ExternalOrderShipped to a Kafka topic
+ */
 @Service
 @Slf4j
-public class ShippingEventKafkaPublisher {
+public class ShippingEventKafkaPublisher extends AnnotatedEventHandler<Object> {
     public static final String SHIPPING_EVENTS_TOPIC_NAME = "shipping-events";
 
     private final Outbox<ExternalOrderShippingEvent> kafkaOutbox;
 
     public ShippingEventKafkaPublisher(@NonNull Outboxes outboxes,
-                                       @NonNull EventStoreSubscriptionManager eventStoreSubscriptionManager,
+                                       @NonNull EventBus<Object> eventBus,
                                        @NonNull KafkaTemplate<String, Object> kafkaTemplate,
                                        @NonNull UnitOfWorkFactory<?> unitOfWorkFactory) {
         // Setup the outbox to forward to Kafka
@@ -60,24 +60,13 @@ public class ShippingEventKafkaPublisher {
                                                      kafkaTemplate.send(producerRecord);
                                                      log.info("*** Completed sending event {} to Kafka. Order '{}'", e.getClass().getSimpleName(), e.orderId);
                                                  });
+    }
 
-        // Subscribe ShippingOrder events and add only OrderShipped event to the Outbox as an ExternalOrderShipped event
-        eventStoreSubscriptionManager.subscribeToAggregateEventsAsynchronously(SubscriberId.of("ShippingEventKafkaPublisher-ShippingEvents"),
-                                                                               ShippingOrders.AGGREGATE_TYPE,
-                                                                               GlobalEventOrder.FIRST_GLOBAL_EVENT_ORDER,
-                                                                               Optional.empty(),
-                                                                               new PatternMatchingPersistedEventHandler() {
-                                                                                   @Override
-                                                                                   protected void handleUnmatchedEvent(PersistedEvent event) {
-                                                                                       // Ignore any events not explicitly handled - the original logic throws an exception to notify subscribers of unhandled events
-                                                                                   }
-
-                                                                                   @SubscriptionEventHandler
-                                                                                   void handle(OrderShipped e) {
-                                                                                       log.info("*** Received {} for Order '{}' and adding it to the Outbox as a {} message", e.getClass().getSimpleName(), e.orderId, ExternalOrderShipped.class.getSimpleName());
-                                                                                       unitOfWorkFactory.usingUnitOfWork(() -> kafkaOutbox.sendMessage(new ExternalOrderShipped(e.orderId)));
-                                                                                   }
-                                                                               });
+    @Handler
+    private void handle(OrderShipped e) {
+        log.info("*** Received {} for Order '{}' and adding it to the Outbox as a {} message", e.getClass().getSimpleName(), e.orderId, ExternalOrderShipped.class.getSimpleName());
+        // Since we're listening to the EventBus synchronously and the Message handling is transactional then adding the message to the Outbox joins in on the same underlying transaction
+        kafkaOutbox.sendMessage(new ExternalOrderShipped(e.orderId));
     }
 
     /**

@@ -14,14 +14,13 @@
  * limitations under the License.
  */
 
-package dk.cloudcreate.essentials.spring.examples.postgresql.cqrs.shipping;
+package dk.cloudcreate.essentials.spring.examples.mongodb.messaging.shipping;
 
-import dk.cloudcreate.essentials.components.foundation.messaging.queue.DurableQueues;
-import dk.cloudcreate.essentials.components.foundation.reactive.command.DurableLocalCommandBus;
-import dk.cloudcreate.essentials.spring.examples.postgresql.cqrs.shipping.adapters.kafka.incoming.*;
-import dk.cloudcreate.essentials.spring.examples.postgresql.cqrs.shipping.adapters.kafka.outgoing.*;
-import dk.cloudcreate.essentials.spring.examples.postgresql.cqrs.shipping.commands.*;
-import dk.cloudcreate.essentials.spring.examples.postgresql.cqrs.shipping.domain.ShippingDestinationAddress;
+import dk.cloudcreate.essentials.reactive.command.CommandBus;
+import dk.cloudcreate.essentials.spring.examples.mongodb.messaging.shipping.adapters.kafka.incoming.*;
+import dk.cloudcreate.essentials.spring.examples.mongodb.messaging.shipping.adapters.kafka.outgoing.*;
+import dk.cloudcreate.essentials.spring.examples.mongodb.messaging.shipping.commands.RegisterShippingOrder;
+import dk.cloudcreate.essentials.spring.examples.mongodb.messaging.shipping.domain.ShippingDestinationAddress;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.junit.jupiter.api.*;
@@ -50,10 +49,7 @@ public class OrderShippingProcessorIT {
     private static final Logger log = LoggerFactory.getLogger(OrderShippingProcessorIT.class);
 
     @Container
-    static PostgreSQLContainer<?> postgreSQLContainer = new PostgreSQLContainer<>("postgres:latest")
-            .withDatabaseName("test")
-            .withPassword("test")
-            .withUsername("test");
+    static MongoDBContainer mongoDBContainer = new MongoDBContainer("mongo:latest");
 
     @Container
     static  KafkaContainer                                kafkaContainer = new KafkaContainer(DockerImageName.parse("confluentinc/cp-kafka:latest"));
@@ -61,9 +57,7 @@ public class OrderShippingProcessorIT {
 
     @DynamicPropertySource
     static void setProperties(DynamicPropertyRegistry registry) {
-        registry.add("spring.datasource.url", postgreSQLContainer::getJdbcUrl);
-        registry.add("spring.datasource.password", postgreSQLContainer::getPassword);
-        registry.add("spring.datasource.username", postgreSQLContainer::getUsername);
+        registry.add("spring.data.mongodb.uri", mongoDBContainer::getReplicaSetUrl);
 
         registry.add("spring.kafka.bootstrap-servers", kafkaContainer::getBootstrapServers);
     }
@@ -73,16 +67,12 @@ public class OrderShippingProcessorIT {
 
 
     @Autowired
-    private OrderShippingProcessor orderShippingProcessor;
-
+    private OrderEventsKafkaListener    orderEventsKafkaListener;
     @Autowired
     private ShippingEventKafkaPublisher shippingEventKafkaPublisher;
 
     @Autowired
-    private DurableLocalCommandBus commandBus;
-
-    @Autowired
-    private DurableQueues durableQueues;
+    private CommandBus commandBus;
 
     @Autowired
     ConsumerFactory<String, Object> kafkaConsumerFactory;
@@ -134,9 +124,8 @@ public class OrderShippingProcessorIT {
         assertThat(shippingRecordsReceived.get(0).value()).isInstanceOf(ExternalOrderShipped.class);
         assertThat((CharSequence) ((ExternalOrderShipped) shippingRecordsReceived.get(0).value()).orderId).isEqualTo(orderId);
 
-        // Verify that both the DurableLocalCommandBus and Outbox are empty
-        var commandQueueName = commandBus.getCommandQueueNameSelector().selectDurableQueueNameFor(new ShipOrder(orderId), orderShippingProcessor, Optional.empty());
-        assertThat(durableQueues.getTotalMessagesQueuedFor(commandQueueName)).isEqualTo(0);
+        // Verify that both the inbox and outbox'es are empty
+        assertThat(orderEventsKafkaListener.getShipOrdersInbox().getNumberOfUndeliveredMessages()).isEqualTo(0);
         assertThat(shippingEventKafkaPublisher.getKafkaOutbox().getNumberOfOutgoingMessages()).isEqualTo(0);
     }
 }

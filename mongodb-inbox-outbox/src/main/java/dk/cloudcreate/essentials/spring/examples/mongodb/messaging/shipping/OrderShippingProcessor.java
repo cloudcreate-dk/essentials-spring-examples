@@ -14,12 +14,13 @@
  * limitations under the License.
  */
 
-package dk.cloudcreate.essentials.spring.examples.postgresql.cqrs.shipping;
+package dk.cloudcreate.essentials.spring.examples.mongodb.messaging.shipping;
 
-import dk.cloudcreate.essentials.reactive.Handler;
+import dk.cloudcreate.essentials.reactive.*;
 import dk.cloudcreate.essentials.reactive.command.AnnotatedCommandHandler;
-import dk.cloudcreate.essentials.spring.examples.postgresql.cqrs.shipping.commands.*;
-import dk.cloudcreate.essentials.spring.examples.postgresql.cqrs.shipping.domain.*;
+import dk.cloudcreate.essentials.spring.examples.mongodb.messaging.shipping.commands.*;
+import dk.cloudcreate.essentials.spring.examples.mongodb.messaging.shipping.domain.*;
+import dk.cloudcreate.essentials.spring.examples.mongodb.messaging.shipping.domain.events.*;
 import lombok.NonNull;
 import org.slf4j.*;
 import org.springframework.stereotype.Service;
@@ -28,10 +29,13 @@ import org.springframework.stereotype.Service;
 public class OrderShippingProcessor extends AnnotatedCommandHandler {
     private static Logger log = LoggerFactory.getLogger(OrderShippingProcessor.class);
 
-    private final ShippingOrders shippingOrders;
+    private final ShippingOrders   shippingOrders;
+    private final EventBus<Object> eventBus;
 
-    public OrderShippingProcessor(@NonNull ShippingOrders shippingOrders) {
+    public OrderShippingProcessor(@NonNull ShippingOrders shippingOrders,
+                                  @NonNull EventBus<Object> eventBus) {
         this.shippingOrders = shippingOrders;
+        this.eventBus = eventBus;
     }
 
     // Automatically runs in a transaction as it's forwarded by the DurableLocalCommandBus
@@ -41,14 +45,17 @@ public class OrderShippingProcessor extends AnnotatedCommandHandler {
         if (existingOrder.isEmpty()) {
             log.debug("===> Requesting New ShippingOrder '{}'", cmd.orderId);
             shippingOrders.registerNewOrder(new ShippingOrder(cmd));
+            eventBus.publish(new ShippingOrderRegistered(cmd));
         }
     }
 
-    // Automatically runs in a transaction as it's forwarded by the DurableLocalCommandBus
+    // Automatically runs in a transaction as it's forwarded by the Inbox
     @Handler
     void handle(ShipOrder cmd) {
         log.debug("===> Initiating Shipping of Order '{}'", cmd.orderId);
         var existingOrder = shippingOrders.getOrder(cmd.orderId);
-        existingOrder.markOrderAsShipped();
+        if (existingOrder.markOrderAsShipped()) {
+            eventBus.publish(new OrderShipped(cmd.orderId));
+        }
     }
 }

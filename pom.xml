@@ -58,6 +58,7 @@
 
     <modules>
         <module>postgresql-cqrs</module>
+        <module>mongodb-inbox-outbox</module>
     </modules>
 
     <dependencyManagement>

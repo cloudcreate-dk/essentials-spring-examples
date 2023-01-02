@@ -73,7 +73,8 @@ public class AccountsIT {
         var depositAmount = Amount.of("100");
 
         var allPersistedEvents = new ArrayList<PersistedEvents>();
-        eventStoreEventBus.addSyncSubscriber(persistedEvents -> {
+        eventStoreEventBus.addSyncSubscriber(event -> {
+            var persistedEvents = (PersistedEvents) event;
             if (persistedEvents.commitStage == CommitStage.BeforeCommit && persistedEvents.events.size() > 0) {
                 allPersistedEvents.add(persistedEvents);
             }

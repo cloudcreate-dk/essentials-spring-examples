@@ -129,7 +129,7 @@ public class TransferMoneyProcessor extends AnnotatedCommandHandler {
     }
 
 
-    private class MoneyTransferLifecycleHandler extends AnnotatedEventHandler<Object> {
+    private class MoneyTransferLifecycleHandler extends AnnotatedEventHandler {
         @Handler
         void handle(IntraBankMoneyTransferRequested e) {
             // Note any exceptions thrown will cause the message to be redelivered

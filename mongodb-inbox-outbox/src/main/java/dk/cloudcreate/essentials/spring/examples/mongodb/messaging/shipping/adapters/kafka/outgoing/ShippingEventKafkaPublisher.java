@@ -36,13 +36,13 @@ import java.time.Duration;
  */
 @Service
 @Slf4j
-public class ShippingEventKafkaPublisher extends AnnotatedEventHandler<Object> {
+public class ShippingEventKafkaPublisher extends AnnotatedEventHandler {
     public static final String SHIPPING_EVENTS_TOPIC_NAME = "shipping-events";
 
     private final Outbox<ExternalOrderShippingEvent> kafkaOutbox;
 
     public ShippingEventKafkaPublisher(@NonNull Outboxes outboxes,
-                                       @NonNull EventBus<Object> eventBus,
+                                       @NonNull EventBus eventBus,
                                        @NonNull KafkaTemplate<String, Object> kafkaTemplate,
                                        @NonNull UnitOfWorkFactory<?> unitOfWorkFactory) {
         // Setup the outbox to forward to Kafka

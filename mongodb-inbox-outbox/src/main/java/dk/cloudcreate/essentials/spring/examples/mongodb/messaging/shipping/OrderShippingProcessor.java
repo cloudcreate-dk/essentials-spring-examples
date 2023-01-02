@@ -30,10 +30,10 @@ public class OrderShippingProcessor extends AnnotatedCommandHandler {
     private static Logger log = LoggerFactory.getLogger(OrderShippingProcessor.class);
 
     private final ShippingOrders   shippingOrders;
-    private final EventBus<Object> eventBus;
+    private final EventBus eventBus;
 
     public OrderShippingProcessor(@NonNull ShippingOrders shippingOrders,
-                                  @NonNull EventBus<Object> eventBus) {
+                                  @NonNull EventBus eventBus) {
         this.shippingOrders = shippingOrders;
         this.eventBus = eventBus;
     }

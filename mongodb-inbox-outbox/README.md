@@ -29,7 +29,7 @@ The `EssentialsComponentsConfiguration` auto-configures:
        # essentials.durable-queues.message-handling-timeout=5s
       ```
 - `Inboxes`, `Outboxes` and `DurableLocalCommandBus` configured to use `MongoDurableQueues`
-- `LocalEventBus<Object>` with bus-name `default` and Bean name `eventBus`
+- `LocalEventBus` with bus-name `default` and Bean name `eventBus`
 - `ReactiveHandlersBeanPostProcessor` (for auto-registering `EventHandler` and `CommandHandler` Beans with the `EventBus`'s and `CommandBus` beans found in the `ApplicationContext`)
 - Automatically calling `Lifecycle.start()`/`Lifecycle.stop`, on any Beans implementing the `Lifecycle` interface, when the `ApplicationContext` is started/stopped
 

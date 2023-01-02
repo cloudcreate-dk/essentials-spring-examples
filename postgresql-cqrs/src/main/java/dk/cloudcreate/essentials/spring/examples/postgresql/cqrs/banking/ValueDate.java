@@ -16,11 +16,13 @@
 
 package dk.cloudcreate.essentials.spring.examples.postgresql.cqrs.banking;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import dk.cloudcreate.essentials.types.LocalDateType;
 
 import java.time.LocalDate;
 
 public class ValueDate extends LocalDateType<ValueDate> {
+    @JsonCreator
     public ValueDate(LocalDate value) {
         super(value);
     }

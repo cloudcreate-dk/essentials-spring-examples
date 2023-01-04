@@ -27,7 +27,14 @@
     </suppress>
     <suppress>
         <notes><![CDATA[
-   file name: spring-postgresql-event-store-0.4.1.jar
+   file name: spring-boot-starter-postgresql-0.8.4.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/dk\.cloudcreate\.essentials\.components/spring\-boot\-starter\-postgresql@.*$</packageUrl>
+        <cpe>cpe:/a:postgresql:postgresql</cpe>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: spring-postgresql-event-store-0.8.4.jar
    ]]></notes>
         <packageUrl regex="true">^pkg:maven/dk\.cloudcreate\.essentials\.components/spring\-postgresql\-event\-store@.*$</packageUrl>
         <cpe>cpe:/a:postgresql:postgresql</cpe>

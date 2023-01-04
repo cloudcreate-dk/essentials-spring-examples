@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2022 the original author or authors.
+ * Copyright 2021-2023 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@
 package dk.cloudcreate.essentials.spring.examples.postgresql.cqrs.banking;
 
 import dk.cloudcreate.essentials.components.foundation.transaction.*;
-import dk.cloudcreate.essentials.reactive.command.LocalCommandBus;
+import dk.cloudcreate.essentials.reactive.command.CommandBus;
 import dk.cloudcreate.essentials.spring.examples.postgresql.cqrs.banking.commands.RequestIntraBankMoneyTransfer;
 import dk.cloudcreate.essentials.spring.examples.postgresql.cqrs.banking.domain.account.*;
 import dk.cloudcreate.essentials.spring.examples.postgresql.cqrs.banking.domain.transactions.intrabank.*;
@@ -27,6 +27,7 @@ import org.awaitility.Awaitility;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.*;
 import org.testcontainers.containers.*;
 import org.testcontainers.junit.jupiter.Container;
@@ -40,6 +41,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest
 @Testcontainers
 @Slf4j
+@DirtiesContext
 public class TransferMoneyProcessorIT {
 
     @Container
@@ -66,7 +68,7 @@ public class TransferMoneyProcessorIT {
     private IntraBankMoneyTransfers moneyTransfers;
 
     @Autowired
-    private LocalCommandBus commandBus;
+    private CommandBus commandBus;
 
     @Autowired
     private UnitOfWorkFactory<? extends UnitOfWork> unitOfWorkFactory;

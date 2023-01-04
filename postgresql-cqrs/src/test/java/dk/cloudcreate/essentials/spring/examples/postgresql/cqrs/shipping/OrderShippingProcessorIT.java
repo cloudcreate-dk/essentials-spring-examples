@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2022 the original author or authors.
+ * Copyright 2021-2023 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,10 +16,11 @@
 
 package dk.cloudcreate.essentials.spring.examples.postgresql.cqrs.shipping;
 
-import dk.cloudcreate.essentials.reactive.command.LocalCommandBus;
+import dk.cloudcreate.essentials.components.foundation.messaging.queue.DurableQueues;
+import dk.cloudcreate.essentials.components.foundation.reactive.command.DurableLocalCommandBus;
 import dk.cloudcreate.essentials.spring.examples.postgresql.cqrs.shipping.adapters.kafka.incoming.*;
 import dk.cloudcreate.essentials.spring.examples.postgresql.cqrs.shipping.adapters.kafka.outgoing.*;
-import dk.cloudcreate.essentials.spring.examples.postgresql.cqrs.shipping.commands.RegisterShippingOrder;
+import dk.cloudcreate.essentials.spring.examples.postgresql.cqrs.shipping.commands.*;
 import dk.cloudcreate.essentials.spring.examples.postgresql.cqrs.shipping.domain.ShippingDestinationAddress;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.producer.ProducerRecord;
@@ -29,6 +30,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.kafka.core.*;
 import org.springframework.kafka.listener.*;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.*;
 import org.testcontainers.containers.*;
 import org.testcontainers.junit.jupiter.Container;
@@ -43,6 +45,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @Testcontainers
+@DirtiesContext
 public class OrderShippingProcessorIT {
     private static final Logger log = LoggerFactory.getLogger(OrderShippingProcessorIT.class);
 
@@ -70,10 +73,16 @@ public class OrderShippingProcessorIT {
 
 
     @Autowired
-    private OrderEventsKafkaListener orderEventsKafkaListener;
+    private OrderShippingProcessor orderShippingProcessor;
 
     @Autowired
-    private LocalCommandBus commandBus;
+    private ShippingEventKafkaPublisher shippingEventKafkaPublisher;
+
+    @Autowired
+    private DurableLocalCommandBus commandBus;
+
+    @Autowired
+    private DurableQueues durableQueues;
 
     @Autowired
     ConsumerFactory<String, Object> kafkaConsumerFactory;
@@ -124,5 +133,10 @@ public class OrderShippingProcessorIT {
                   .untilAsserted(() -> assertThat(shippingRecordsReceived.size()).isEqualTo(1));
         assertThat(shippingRecordsReceived.get(0).value()).isInstanceOf(ExternalOrderShipped.class);
         assertThat((CharSequence) ((ExternalOrderShipped) shippingRecordsReceived.get(0).value()).orderId).isEqualTo(orderId);
+
+        // Verify that both the DurableLocalCommandBus and Outbox are empty
+        var commandQueueName = commandBus.getCommandQueueNameSelector().selectDurableQueueNameFor(new ShipOrder(orderId), orderShippingProcessor, Optional.empty());
+        assertThat(durableQueues.getTotalMessagesQueuedFor(commandQueueName)).isEqualTo(0);
+        assertThat(shippingEventKafkaPublisher.getKafkaOutbox().getNumberOfOutgoingMessages()).isEqualTo(0);
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2022 the original author or authors.
+ * Copyright 2021-2023 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -61,7 +61,7 @@ public class AccountsIT {
     private Accounts accounts;
 
     @Autowired
-    private EventStoreLocalEventBus eventStoreEventBus;
+    private EventStoreEventBus eventStoreEventBus;
 
     @Autowired
     private UnitOfWorkFactory<? extends UnitOfWork> unitOfWorkFactory;
@@ -73,7 +73,8 @@ public class AccountsIT {
         var depositAmount = Amount.of("100");
 
         var allPersistedEvents = new ArrayList<PersistedEvents>();
-        eventStoreEventBus.addSyncSubscriber(persistedEvents -> {
+        eventStoreEventBus.addSyncSubscriber(event -> {
+            var persistedEvents = (PersistedEvents) event;
             if (persistedEvents.commitStage == CommitStage.BeforeCommit && persistedEvents.events.size() > 0) {
                 allPersistedEvents.add(persistedEvents);
             }

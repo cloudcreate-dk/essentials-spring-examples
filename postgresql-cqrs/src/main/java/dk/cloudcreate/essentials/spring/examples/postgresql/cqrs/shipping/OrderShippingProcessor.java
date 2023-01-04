@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2022 the original author or authors.
+ * Copyright 2021-2023 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,7 +34,7 @@ public class OrderShippingProcessor extends AnnotatedCommandHandler {
         this.shippingOrders = shippingOrders;
     }
 
-    // Automatically runs in a transaction as it's forwarded by the Inbox
+    // Automatically runs in a transaction as it's forwarded by the DurableLocalCommandBus
     @Handler
     void handle(RegisterShippingOrder cmd) {
         var existingOrder = shippingOrders.findOrder(cmd.orderId);
@@ -44,7 +44,7 @@ public class OrderShippingProcessor extends AnnotatedCommandHandler {
         }
     }
 
-    // Automatically runs in a transaction as it's forwarded by the Inbox
+    // Automatically runs in a transaction as it's forwarded by the DurableLocalCommandBus
     @Handler
     void handle(ShipOrder cmd) {
         log.debug("===> Initiating Shipping of Order '{}'", cmd.orderId);

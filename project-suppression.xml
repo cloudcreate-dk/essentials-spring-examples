@@ -27,6 +27,21 @@
     </suppress>
     <suppress>
         <notes><![CDATA[
+        Snake yaml wrongly matched as go-yaml
+   file name: snakeyaml-1.33.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.yaml/snakeyaml@.*$</packageUrl>
+        <cpe>cpe:/a:yaml_project:yaml</cpe>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: LatencyUtils-2.0.3.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.latencyutils/LatencyUtils@.*$</packageUrl>
+        <cpe>cpe:/a:utils_project:utils</cpe>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
    file name: spring-boot-starter-postgresql-0.8.4.jar
    ]]></notes>
         <packageUrl regex="true">^pkg:maven/dk\.cloudcreate\.essentials\.components/spring\-boot\-starter\-postgresql@.*$</packageUrl>

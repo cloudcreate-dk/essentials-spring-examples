@@ -46,7 +46,7 @@ public class TransferMoneyProcessor extends AnnotatedCommandHandler {
     private final IntraBankMoneyTransfers                                     intraBankMoneyTransfers;
     private final CommandBus                                                  commandBus;
     private final EventStoreUnitOfWorkFactory<? extends EventStoreUnitOfWork> unitOfWorkFactory;
-    private final Outbox<Object>                                              moneyTransferEventsOutbox;
+    private final Outbox                                                      moneyTransferEventsOutbox;
 
     public TransferMoneyProcessor(@NonNull Accounts accounts,
                                   @NonNull IntraBankMoneyTransfers intraBankMoneyTransfers,

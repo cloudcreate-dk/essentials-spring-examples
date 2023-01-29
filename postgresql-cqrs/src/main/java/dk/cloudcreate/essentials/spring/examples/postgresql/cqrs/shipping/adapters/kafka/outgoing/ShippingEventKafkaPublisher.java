@@ -39,7 +39,7 @@ import java.util.Optional;
 public class ShippingEventKafkaPublisher {
     public static final String SHIPPING_EVENTS_TOPIC_NAME = "shipping-events";
 
-    private final Outbox<ExternalOrderShippingEvent> kafkaOutbox;
+    private final Outbox kafkaOutbox;
 
     public ShippingEventKafkaPublisher(@NonNull Outboxes outboxes,
                                        @NonNull EventStoreSubscriptionManager eventStoreSubscriptionManager,
@@ -52,7 +52,8 @@ public class ShippingEventKafkaPublisher {
                                                              .setMessageConsumptionMode(MessageConsumptionMode.SingleGlobalConsumer)
                                                              .setNumberOfParallelMessageConsumers(1)
                                                              .build(),
-                                                 e -> {
+                                                 msg -> {
+                                                     var e = (ExternalOrderShippingEvent) msg.getPayload();
                                                      log.info("*** Forwarding Outbox {} message to Kafka. Order '{}'", e.getClass().getSimpleName(), e.orderId);
                                                      var producerRecord = new ProducerRecord<String, Object>(SHIPPING_EVENTS_TOPIC_NAME,
                                                                                                              e.orderId.toString(),
@@ -83,7 +84,7 @@ public class ShippingEventKafkaPublisher {
     /**
      * Only used for testing purposes
      */
-    public Outbox<ExternalOrderShippingEvent> getKafkaOutbox() {
+    public Outbox getKafkaOutbox() {
         return kafkaOutbox;
     }
 }

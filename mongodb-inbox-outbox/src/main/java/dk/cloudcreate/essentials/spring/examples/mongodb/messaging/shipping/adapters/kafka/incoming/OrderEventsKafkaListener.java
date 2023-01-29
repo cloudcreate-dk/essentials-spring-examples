@@ -33,7 +33,7 @@ import java.time.Duration;
 public class OrderEventsKafkaListener {
     public static final String ORDER_EVENTS_TOPIC_NAME = "order-events";
 
-    private Inbox<ShipOrder> shipOrdersInbox;
+    private Inbox shipOrdersInbox;
 
     public OrderEventsKafkaListener(@NonNull Inboxes inboxes,
                                     @NonNull CommandBus commandBus) {
@@ -71,7 +71,7 @@ public class OrderEventsKafkaListener {
     /**
      * Only used for testing purposes
      */
-    public Inbox<ShipOrder> getShipOrdersInbox() {
+    public Inbox getShipOrdersInbox() {
         return shipOrdersInbox;
     }
 }

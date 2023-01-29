@@ -60,15 +60,15 @@
         <java.version>11</java.version>
 
         <revision>DEV-SNAPSHOT</revision>
-        <essentials.version>0.8.5</essentials.version>
+        <essentials.version>0.8.7</essentials.version>
 
         <slf4j.version>1.7.36</slf4j.version>
         <postgresql.version>42.5.1</postgresql.version>
         <objenesis.version>3.3</objenesis.version>
-        <assertj.version>3.24.1</assertj.version>
+        <assertj.version>3.24.2</assertj.version>
         <awaitility.version>4.2.0</awaitility.version>
-        <spring-boot.version>2.7.7</spring-boot.version>
-        <spring-kafka.version>2.9.4</spring-kafka.version>
+        <spring-boot.version>2.7.8</spring-boot.version>
+        <spring-kafka.version>2.9.5</spring-kafka.version>
         <log4j-to-slf4j.version>2.19.0</log4j-to-slf4j.version>
     </properties>
 
@@ -82,7 +82,7 @@
             <dependency>
                 <groupId>org.junit</groupId>
                 <artifactId>junit-bom</artifactId>
-                <version>5.9.1</version>
+                <version>5.9.2</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -110,14 +110,14 @@
             <dependency>
                 <groupId>io.projectreactor</groupId>
                 <artifactId>reactor-bom</artifactId>
-                <version>2020.0.26</version>
+                <version>2020.0.27</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
             <dependency>
                 <groupId>org.mockito</groupId>
                 <artifactId>mockito-bom</artifactId>
-                <version>4.11.0</version>
+                <version>5.0.0</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -300,7 +300,7 @@
             <plugin>
                 <groupId>org.owasp</groupId>
                 <artifactId>dependency-check-maven</artifactId>
-                <version>7.4.4</version>
+                <version>8.0.1</version>
                 <configuration>
                     <skipTestScope>false</skipTestScope>
                     <failBuildOnAnyVulnerability>true</failBuildOnAnyVulnerability>

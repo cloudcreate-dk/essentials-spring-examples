@@ -28,7 +28,12 @@
     <logger name="dk.cloudcreate.essentials.components.foundation.transaction" level="INFO"/>
     <logger name="dk.cloudcreate.essentials.components.eventsourced.eventstore.postgresql.spring" level="INFO"/>
     <logger name="dk.cloudcreate.essentials.components.distributed.fencedlock" level="INFO"/>
+    <logger name="dk.cloudcreate.essentials.components.eventsourced.eventstore.postgresql.EventStore.PollingEventStream" level="INFO"/>
+
+    <!-- Set to TRACE to see detailed queue logs -->
     <logger name="dk.cloudcreate.essentials.components.queue" level="INFO"/>
+    <logger name="dk.cloudcreate.essentials.components.foundation.messaging.queue" level="INFO"/>
+
 
     <root level="INFO">
         <appender-ref ref="STDOUT"/>

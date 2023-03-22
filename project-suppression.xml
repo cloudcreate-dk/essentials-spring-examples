@@ -208,4 +208,39 @@
         <packageUrl regex="true">^pkg:maven/net\.java\.dev\.jna/jna@.*$</packageUrl>
         <cpe>cpe:/a:oracle:java_se</cpe>
     </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: jackson-core-2.14.2.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/com\.fasterxml\.jackson\.core/jackson\-core@.*$</packageUrl>
+        <cpe>cpe:/a:json-java_project:json-java</cpe>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: accessors-smart-2.4.7.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/net\.minidev/accessors\-smart@.*$</packageUrl>
+        <cpe>cpe:/a:json-java_project:json-java</cpe>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: android-json-0.0.20131108.vaadin1.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/com\.vaadin\.external\.google/android\-json@.*$</packageUrl>
+        <cpe>cpe:/a:json-java_project:json-java</cpe>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: json-path-2.7.0.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/com\.jayway\.jsonpath/json\-path@.*$</packageUrl>
+        <cpe>cpe:/a:json-java_project:json-java</cpe>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: json-smart-2.4.7.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/net\.minidev/json\-smart@.*$</packageUrl>
+        <cpe>cpe:/a:json-java_project:json-java</cpe>
+    </suppress>
 </suppressions>

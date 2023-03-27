@@ -1,34 +1,33 @@
-# Essentials components: MongoDB Inbox-Outbox example
+# Essentials components: Postgresql Inbox-Outbox example
 
-The example uses the `spring-boot-starter-mongodb` that provides Spring Boot auto-configuration for all MongoDB focused Essentials components.
+The example uses the `spring-boot-starter-postgresql` that provides Spring Boot auto-configuration for all Postgresql focused Essentials components.  
 All `@Beans` auto-configured by this library use `@ConditionalOnMissingBean` to allow for easy overriding.
 
-The following Essentials components are auto configured:
-The `EssentialsComponentsConfiguration` auto-configures:
+The following Essentials components are auto configured by the `EssentialsComponentsConfiguration`:
 - Jackson/FasterXML JSON modules:
-    - `EssentialTypesJacksonModule`
-    - `EssentialsImmutableJacksonModule` (if `Objenesis` is on the classpath)
-    - `ObjectMapper` with bean name `essentialComponentsObjectMapper` which provides good defaults for JSON serialization
-- `SingleValueTypeRandomIdGenerator` to support server generated Id creations for SpringData Mongo classes with @Id fields of type `SingleValueType`
-- `MongoCustomConversions` with a `SingleValueTypeConverter` covering `LockName`, `QueueEntryId` and `QueueName`
-- `MongoTransactionManager` as it is needed by the `SpringMongoTransactionAwareUnitOfWorkFactory`
-- `SpringMongoTransactionAwareUnitOfWorkFactory` configured to use the `MongoTransactionManager`
-- `MongoFencedLockManager` using the `essentialComponentsObjectMapper` as JSON serializer
-    - Supports additional properties:
-    - ```
-       essentials.fenced-lock-manager.fenced-locks-collection-name=fenced_locks
-       essentials.fenced-lock-manager.lock-confirmation-interval=5s
-       essentials.fenced-lock-manager.lock-time-out=12s
-      ```
-- `MongoDurableQueues` using the `essentialComponentsObjectMapper` as JSON serializer
-    - Supports additional properties:
-    - ```
-       essentials.durable-queues.shared-queue-collection-name=durable_queues
-       essentials.durable-queues.transactional-mode=fullytransactional
-       # Only relevant if transactional-mode=manualacknowledgement
-       # essentials.durable-queues.message-handling-timeout=5s
-      ```
-- `Inboxes`, `Outboxes` and `DurableLocalCommandBus` configured to use `MongoDurableQueues`
+  - `EssentialTypesJacksonModule`
+  - `EssentialsImmutableJacksonModule` (if `Objenesis` is on the classpath)
+  - `ObjectMapper` with bean name `essentialComponentsObjectMapper` which provides good defaults for JSON serialization
+- `Jdbi` to use the provided Spring `DataSource`
+- `SpringTransactionAwareJdbiUnitOfWorkFactory` configured to use the Spring provided `PlatformTransactionManager`
+  - This `UnitOfWorkFactory` will only be auto-registered if the `SpringTransactionAwareEventStoreUnitOfWorkFactory` is not on the classpath (see `EventStoreConfiguration`)
+- `PostgresqlFencedLockManager` using the `essentialComponentsObjectMapper` as JSON serializer
+  - Supports additional properties:
+  - ```
+    essentials.fenced-lock-manager.fenced-locks-table-name=fenced_locks
+    essentials.fenced-lock-manager.lock-confirmation-interval=5s
+    essentials.fenced-lock-manager.lock-time-out=12s
+    ```
+- `PostgresqlDurableQueues` using the `essentialComponentsObjectMapper` as JSON serializer
+  - Supports additional properties:
+  - ```
+    essentials.durable-queues.shared-queue-table-name=durable_queues
+    essentials.durable-queues.polling-delay-interval-increment-factor=0.5
+    essentials.durable-queues.max-polling-interval=2s
+    # Only relevant if transactional-mode=singleoperationtransaction
+    # essentials.durable-queues.message-handling-timeout=5s
+    ```
+- `Inboxes`, `Outboxes` and `DurableLocalCommandBus` configured to use `PostgresqlDurableQueues`
 - `LocalEventBus` with bus-name `default` and Bean name `eventBus`
 - `ReactiveHandlersBeanPostProcessor` (for auto-registering `EventHandler` and `CommandHandler` Beans with the `EventBus`'s and `CommandBus` beans found in the `ApplicationContext`)
 - Automatically calling `Lifecycle.start()`/`Lifecycle.stop`, on any Beans implementing the `Lifecycle` interface, when the `ApplicationContext` is started/stopped

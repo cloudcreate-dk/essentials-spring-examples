@@ -26,16 +26,16 @@
         <version>${revision}</version>
     </parent>
     <description>
-        Postgresql focused CQRS with Event sourcing example
+        Postgresql focused Essentials components example
     </description>
 
-    <artifactId>postgresql-cqrs</artifactId>
+    <artifactId>postgresql-inbox-outbox</artifactId>
     <packaging>jar</packaging>
 
     <dependencies>
         <dependency>
             <groupId>dk.cloudcreate.essentials.components</groupId>
-            <artifactId>spring-boot-starter-postgresql-event-store</artifactId>
+            <artifactId>spring-boot-starter-postgresql</artifactId>
             <version>${essentials.version}</version>
         </dependency>
         <dependency>
@@ -45,7 +45,7 @@
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-jdbc</artifactId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
             <version>${spring-boot.version}</version>
         </dependency>
         <dependency>

@@ -1,6 +1,6 @@
 # Essentials components: MongoDB Inbox-Outbox example
 
-The example uses the `spring-boot-starter-mongodb` to  provides Spring Boot auto-configuration for all MongoDB focused Essentials components.
+The example uses the `spring-boot-starter-mongodb` that provides Spring Boot auto-configuration for all MongoDB focused Essentials components.
 All `@Beans` auto-configured by this library use `@ConditionalOnMissingBean` to allow for easy overriding.
 
 The following Essentials components are auto configured:
@@ -33,7 +33,7 @@ The `EssentialsComponentsConfiguration` auto-configures:
 - `ReactiveHandlersBeanPostProcessor` (for auto-registering `EventHandler` and `CommandHandler` Beans with the `EventBus`'s and `CommandBus` beans found in the `ApplicationContext`)
 - Automatically calling `Lifecycle.start()`/`Lifecycle.stop`, on any Beans implementing the `Lifecycle` interface, when the `ApplicationContext` is started/stopped
 
-## Example flow
+## Example Shipping flow
 
 The `OrderShippingProcessorIT` integration-test coordinates the test flow:
 - First a `ShippingOrder` aggregate is created, by sending `RegisterShippingOrder` over the `CommandBus`

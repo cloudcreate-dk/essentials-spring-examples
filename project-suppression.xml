@@ -91,6 +91,34 @@
     </suppress>
     <suppress>
         <notes><![CDATA[
+   essentials modules with postgresql in the module name
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/dk\.cloudcreate\.essentials\.components/*postgresql*.*$</packageUrl>
+        <cpe>cpe:/a:postgresql:postgresql</cpe>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   spring-postgresql-event-store is mismatched, but only when running on GitHub
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/dk\.cloudcreate\.essentials\.components/spring-postgresql-event-store*.*$</packageUrl>
+        <cpe>cpe:/a:postgresql:postgresql</cpe>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   spring-boot-starter-postgresql
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/dk\.cloudcreate\.essentials\.components/spring-boot-starter-postgresql*.*$</packageUrl>
+        <cpe>cpe:/a:postgresql:postgresql</cpe>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   spring-boot-starter-postgresql-event-store
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/dk\.cloudcreate\.essentials\.components/spring-boot-starter-postgresql-event-store*.*$</packageUrl>
+        <cpe>cpe:/a:postgresql:postgresql</cpe>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
    file name: jopt-simple-5.0.4.jar
    ]]></notes>
         <packageUrl regex="true">^pkg:maven/net\.sf\.jopt\-simple/jopt\-simple@.*$</packageUrl>
@@ -242,5 +270,19 @@
    ]]></notes>
         <packageUrl regex="true">^pkg:maven/net\.minidev/json\-smart@.*$</packageUrl>
         <cpe>cpe:/a:json-java_project:json-java</cpe>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: junit-platform-engine-1.9.2.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.junit\.platform/junit\-platform\-engine@.*$</packageUrl>
+        <cpe>cpe:/a:fan_platform_project:fan_platform</cpe>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: junit-vintage-engine-5.9.2.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.junit\.vintage/junit\-vintage\-engine@.*$</packageUrl>
+        <cpe>cpe:/a:fan_platform_project:fan_platform</cpe>
     </suppress>
 </suppressions>

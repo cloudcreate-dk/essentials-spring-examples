@@ -60,7 +60,7 @@
         <java.version>11</java.version>
 
         <revision>DEV-SNAPSHOT</revision>
-        <essentials.version>DEV-SNAPSHOT</essentials.version>
+        <essentials.version>0.9.4</essentials.version>
 
         <slf4j.version>1.7.36</slf4j.version>
         <postgresql.version>42.6.0</postgresql.version>

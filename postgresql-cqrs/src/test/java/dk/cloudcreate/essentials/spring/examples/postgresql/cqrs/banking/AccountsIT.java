@@ -76,9 +76,11 @@ public class AccountsIT {
 
         var allPersistedEvents = new ArrayList<PersistedEvents>();
         eventStoreEventBus.addSyncSubscriber(event -> {
-            var persistedEvents = (PersistedEvents) event;
-            if (persistedEvents.commitStage == CommitStage.BeforeCommit && persistedEvents.events.size() > 0) {
-                allPersistedEvents.add(persistedEvents);
+            if (event instanceof PersistedEvents) {
+                var persistedEvents = (PersistedEvents) event;
+                if (persistedEvents.commitStage == CommitStage.BeforeCommit && persistedEvents.events.size() > 0) {
+                    allPersistedEvents.add(persistedEvents);
+                }
             }
         });
 

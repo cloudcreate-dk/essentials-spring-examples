@@ -16,14 +16,13 @@
 
 package dk.cloudcreate.essentials.spring.examples.postgresql.cqrs.banking;
 
-import dk.cloudcreate.essentials.components.eventsourced.eventstore.postgresql.subscription.*;
-import dk.cloudcreate.essentials.components.eventsourced.eventstore.postgresql.transaction.*;
-import dk.cloudcreate.essentials.components.foundation.messaging.RedeliveryPolicy;
-import dk.cloudcreate.essentials.components.foundation.messaging.eip.store_and_forward.*;
-import dk.cloudcreate.essentials.components.foundation.transaction.UnitOfWork;
-import dk.cloudcreate.essentials.components.foundation.types.SubscriberId;
-import dk.cloudcreate.essentials.reactive.*;
-import dk.cloudcreate.essentials.reactive.command.*;
+import dk.cloudcreate.essentials.components.eventsourced.eventstore.postgresql.eventstream.AggregateType;
+import dk.cloudcreate.essentials.components.eventsourced.eventstore.postgresql.processor.EventProcessor;
+import dk.cloudcreate.essentials.components.eventsourced.eventstore.postgresql.subscription.EventStoreSubscriptionManager;
+import dk.cloudcreate.essentials.components.foundation.messaging.MessageHandler;
+import dk.cloudcreate.essentials.components.foundation.messaging.eip.store_and_forward.Inboxes;
+import dk.cloudcreate.essentials.components.foundation.reactive.command.DurableLocalCommandBus;
+import dk.cloudcreate.essentials.reactive.Handler;
 import dk.cloudcreate.essentials.spring.examples.postgresql.cqrs.banking.commands.RequestIntraBankMoneyTransfer;
 import dk.cloudcreate.essentials.spring.examples.postgresql.cqrs.banking.domain.account.*;
 import dk.cloudcreate.essentials.spring.examples.postgresql.cqrs.banking.domain.account.events.*;
@@ -34,82 +33,37 @@ import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.time.Duration;
-import java.util.Optional;
+import java.util.List;
 
 import static dk.cloudcreate.essentials.shared.MessageFormatter.msg;
 
 @Service
 @Slf4j
-public class TransferMoneyProcessor extends AnnotatedCommandHandler {
-    private final Accounts                                                    accounts;
-    private final IntraBankMoneyTransfers                                     intraBankMoneyTransfers;
-    private final CommandBus                                                  commandBus;
-    private final EventStoreUnitOfWorkFactory<? extends EventStoreUnitOfWork> unitOfWorkFactory;
-    private final Outbox                                                      moneyTransferEventsOutbox;
+public class TransferMoneyProcessor extends EventProcessor {
+    private final Accounts                accounts;
+    private final IntraBankMoneyTransfers intraBankMoneyTransfers;
 
     public TransferMoneyProcessor(@NonNull Accounts accounts,
                                   @NonNull IntraBankMoneyTransfers intraBankMoneyTransfers,
-                                  @NonNull CommandBus commandBus,
                                   @NonNull EventStoreSubscriptionManager eventStoreSubscriptionManager,
-                                  @NonNull EventStoreUnitOfWorkFactory<? extends EventStoreUnitOfWork> unitOfWorkFactory,
-                                  @NonNull Outboxes outboxes) {
+                                  @NonNull Inboxes inboxes,
+                                  @NonNull DurableLocalCommandBus commandBus) {
+        super(eventStoreSubscriptionManager,
+              inboxes,
+              commandBus);
         this.accounts = accounts;
         this.intraBankMoneyTransfers = intraBankMoneyTransfers;
-        this.commandBus = commandBus;
-        this.unitOfWorkFactory = unitOfWorkFactory;
-        this.moneyTransferEventsOutbox = outboxes.getOrCreateForwardingOutbox(OutboxConfig.builder()
-                                                                                          .setOutboxName(OutboxName.of("MoneyTransfer - Lifecycle"))
-                                                                                          .setMessageConsumptionMode(MessageConsumptionMode.GlobalCompetingConsumers)
-                                                                                          .setNumberOfParallelMessageConsumers(1)
-                                                                                          .setRedeliveryPolicy(RedeliveryPolicy.fixedBackoff(Duration.ofMillis(500), 10))
-                                                                                          .build(),
-                                                                              new MoneyTransferLifecycleHandler());
+    }
 
-        eventStoreSubscriptionManager.subscribeToAggregateEventsInTransaction(SubscriberId.of("TransferMoneyProcessor-AccountEvents"),
-                                                                              Accounts.AGGREGATE_TYPE,
-                                                                              Optional.empty(),
-                                                                              new PatternMatchingTransactionalPersistedEventHandler() {
-                                                                                  @SubscriptionEventHandler
-                                                                                  void handle(AccountDeposited e, UnitOfWork unitOfWork) {
-                                                                                      log.debug("Forwarding {}", e);
-                                                                                      moneyTransferEventsOutbox.sendMessage(e);
-                                                                                  }
+    @Override
+    public String getProcessorName() {
+        return "TransferMoneyProcessor";
+    }
 
-                                                                                  @SubscriptionEventHandler
-                                                                                  void handle(AccountWithdrawn e, UnitOfWork unitOfWork) {
-                                                                                      log.debug("Forwarding {}", e);
-                                                                                      moneyTransferEventsOutbox.sendMessage(e);
-                                                                                  }
-
-                                                                                  @SubscriptionEventHandler
-                                                                                  void handle(AccountOpened e, UnitOfWork unitOfWork) {
-                                                                                      // Ignore
-                                                                                  }
-                                                                              });
-
-        eventStoreSubscriptionManager.subscribeToAggregateEventsInTransaction(SubscriberId.of("TransferMoneyProcessor-IntraBankMoneyTransferEvent"),
-                                                                              IntraBankMoneyTransfers.AGGREGATE_TYPE,
-                                                                              Optional.empty(),
-                                                                              new PatternMatchingTransactionalPersistedEventHandler() {
-                                                                                  @SubscriptionEventHandler
-                                                                                  void handle(IntraBankMoneyTransferRequested e, UnitOfWork unitOfWork) {
-                                                                                      log.debug("Forwarding {}", e);
-                                                                                      moneyTransferEventsOutbox.sendMessage(e);
-                                                                                  }
-
-                                                                                  @SubscriptionEventHandler
-                                                                                  void handle(IntraBankMoneyTransferStatusChanged e, UnitOfWork unitOfWork) {
-                                                                                      log.debug("Forwarding {}", e);
-                                                                                      moneyTransferEventsOutbox.sendMessage(e);
-                                                                                  }
-
-                                                                                  @SubscriptionEventHandler
-                                                                                  void handle(IntraBankMoneyTransferCompleted e, UnitOfWork unitOfWork) {
-                                                                                      log.debug("Forwarding {}", e);
-                                                                                      moneyTransferEventsOutbox.sendMessage(e);
-                                                                                  }
-                                                                              });
+    @Override
+    protected List<AggregateType> reactsToEventsRelatedToAggregateTypes() {
+        return List.of(Accounts.AGGREGATE_TYPE,
+                       IntraBankMoneyTransfers.AGGREGATE_TYPE);
     }
 
     @Handler
@@ -128,58 +82,43 @@ public class TransferMoneyProcessor extends AnnotatedCommandHandler {
         }
     }
 
+    @MessageHandler
+    void handle(IntraBankMoneyTransferRequested e) {
+        var transfer = intraBankMoneyTransfers.getTransfer(e.transactionId);
+        log.debug("===> Transfer '{}' requested - will withdraw {} from account '{}' related to Transfer '{}'", transfer.aggregateId(), transfer.getAmount(), transfer.getFromAccount(), transfer.aggregateId());
+        accounts.getAccount(transfer.getFromAccount())
+                .withdrawToday(transfer.getAmount(),
+                               transfer.aggregateId(),
+                               AllowOverdrawingBalance.NO);
+    }
 
-    private class MoneyTransferLifecycleHandler extends AnnotatedEventHandler {
-        @Handler
-        void handle(IntraBankMoneyTransferRequested e) {
-            // Note any exceptions thrown will cause the message to be redelivered
-            unitOfWorkFactory.usingUnitOfWork(uow -> {
-                var transfer = intraBankMoneyTransfers.getTransfer(e.transactionId);
-                log.debug("===> Transfer '{}' requested - will withdraw {} from account '{}' related to Transfer '{}'", transfer.aggregateId(), transfer.getAmount(), transfer.getFromAccount(), transfer.aggregateId());
-                accounts.getAccount(transfer.getFromAccount())
-                        .withdrawToday(transfer.getAmount(),
-                                       transfer.aggregateId(),
-                                       AllowOverdrawingBalance.NO);
-            });
+    @MessageHandler
+    void handle(IntraBankMoneyTransferStatusChanged e) {
+        var transfer = intraBankMoneyTransfers.getTransfer(e.transactionId);
+        if (transfer.getStatus() == TransferLifeCycleStatus.FROM_ACCOUNT_WITHDRAWN) {
+            log.debug("===> Will deposit {} to account '{}' related to Transfer '{}'", transfer.getAmount(), transfer.getToAccount(), transfer.aggregateId());
+            accounts.getAccount(transfer.getToAccount())
+                    .depositToday(transfer.getAmount(),
+                                  transfer.aggregateId());
         }
+    }
 
-        @Handler
-        void handle(IntraBankMoneyTransferStatusChanged e) {
-            // Note any exceptions thrown will cause the message to be redelivered
-            unitOfWorkFactory.usingUnitOfWork(uow -> {
-                var transfer = intraBankMoneyTransfers.getTransfer(e.transactionId);
-                if (transfer.getStatus() == TransferLifeCycleStatus.FROM_ACCOUNT_WITHDRAWN) {
-                    log.debug("===> Will deposit {} to account '{}' related to Transfer '{}'", transfer.getAmount(), transfer.getToAccount(), transfer.aggregateId());
-                    accounts.getAccount(transfer.getToAccount())
-                            .depositToday(transfer.getAmount(),
-                                          transfer.aggregateId());
-                }
-            });
-        }
+    @MessageHandler
+    void handle(AccountWithdrawn e) {
+        var matchingTransfer = intraBankMoneyTransfers.findTransfer(e.transactionId);
 
-        @Handler
-        void handle(AccountWithdrawn e) {
-            // Note any exceptions thrown will cause the message to be redelivered
-            unitOfWorkFactory.usingUnitOfWork(uow -> {
-                var matchingTransfer = intraBankMoneyTransfers.findTransfer(e.transactionId);
+        matchingTransfer.ifPresent(transfer -> {
+            log.debug("===> Account {} Withdrawn - updating Transfer '{}'", e.accountId, transfer.aggregateId());
+            transfer.markFromAccountAsWithdrawn();
+        });
+    }
 
-                matchingTransfer.ifPresent(transfer -> {
-                    log.debug("===> Account {} Withdrawn - updating Transfer '{}'", e.accountId, transfer.aggregateId());
-                    transfer.markFromAccountAsWithdrawn();
-                });
-            });
-        }
-
-        @Handler
-        void handle(AccountDeposited e) {
-            // Note any exceptions thrown will cause the message to be redelivered
-            unitOfWorkFactory.usingUnitOfWork(uow -> {
-                var matchingTransfer = intraBankMoneyTransfers.findTransfer(e.transactionId);
-                matchingTransfer.ifPresent(transfer -> {
-                    log.debug("===> Account {} Deposited - updating Transfer '{}'", e.accountId, transfer.aggregateId());
-                    transfer.markToAccountAsDeposited();
-                });
-            });
-        }
+    @MessageHandler
+    void handle(AccountDeposited e) {
+        var matchingTransfer = intraBankMoneyTransfers.findTransfer(e.transactionId);
+        matchingTransfer.ifPresent(transfer -> {
+            log.debug("===> Account {} Deposited - updating Transfer '{}'", e.accountId, transfer.aggregateId());
+            transfer.markToAccountAsDeposited();
+        });
     }
 }

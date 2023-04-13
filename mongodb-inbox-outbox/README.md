@@ -25,6 +25,8 @@ The `EssentialsComponentsConfiguration` auto-configures:
     - ```
        essentials.durable-queues.shared-queue-collection-name=durable_queues
        essentials.durable-queues.transactional-mode=fullytransactional
+       essentials.durable-queues.polling-delay-interval-increment-factor=0.5
+       essentials.durable-queues.max-polling-interval=2s
        # Only relevant if transactional-mode=manualacknowledgement
        # essentials.durable-queues.message-handling-timeout=5s
       ```

@@ -49,7 +49,7 @@ The `OrderShippingProcessorIT` integration-test coordinates the test flow:
 - Asynchronously the `shipOrdersInbox` will forward the `ShipOrder` command to the `CommandBus`
   - Note: the `Order` and `ShippingOrder` are correlated/linked through the `OrderId` (aggregates reference each other using id's)
 - The `OrderShippingProcessor.handle(ShipOrder)` command handler method reacts to the `ShipOrder` command
-  - ![Handling a Kafka Message using an Inbox](images/inbox.png) 
+  - ![Handling a Kafka Message using an Inbox](https://github.com/cloudcreate-dk/essentials-project/blob/main/components/foundation/images/inbox.png) 
   - It loads the corresponding `ShippingOrder` instance and performs an idempotency check - if the order is already **marked-as-shipped**  
     - This idempotency check is necessary as we're using in Messaging we deal with At-Least-Once message delivery guarantee and delivery of the `ShipOrder` command can end up 
     being delivered by the `Inbox` multiple times
@@ -59,4 +59,4 @@ The `OrderShippingProcessorIT` integration-test coordinates the test flow:
   - The `ShippingEventKafkaPublisher.handle(OrderShipped)` method converts the `OrderShipped` event to an external event `ExternalOrderShipped`
   - The `ExternalOrderShipped` is then added to the `kafkaOutbox` of type `Outbox`, that the `ShippingEventKafkaPublisher` has configured
 - Asynchronously the `kafkaOutbox` will call its Message consumer (in this case a lambda) which uses a `KafkaTemplate` to publish the `ExternalOrderShipped` to a Kafka Topic
-  - ![Publishing a Kafka Message using an Outbox](images/outbox.png)
+  - ![Publishing a Kafka Message using an Outbox](https://github.com/cloudcreate-dk/essentials-project/blob/main/components/foundation/images/outbox.png)

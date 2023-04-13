@@ -16,20 +16,21 @@ The following Essentials components are auto configured:
     - This `UnitOfWorkFactory` will only be auto-registered if the `SpringTransactionAwareEventStoreUnitOfWorkFactory` is not on the classpath (see `EventStoreConfiguration`)
 - `PostgresqlFencedLockManager` using the `essentialComponentsObjectMapper` as JSON serializer
     - Supports additional properties:
-    - ```
+  ```
     essentials.fenced-lock-manager.fenced-locks-table-name=fenced_locks
     essentials.fenced-lock-manager.lock-confirmation-interval=5s
     essentials.fenced-lock-manager.lock-time-out=12s
     ```
 - `PostgresqlDurableQueues` using the `essentialComponentsObjectMapper` as JSON serializer
     - Supports additional properties:
-    - ```
-    essentials.durable-queues.shared-queue-table-name=durable_queues
-    essentials.durable-queues.polling-delay-interval-increment-factor=0.5
-    essentials.durable-queues.max-polling-interval=2s
-    # Only relevant if transactional-mode=singleoperationtransaction
-    # essentials.durable-queues.message-handling-timeout=5s
-    ```
+  ```
+  essentials.durable-queues.shared-queue-table-name=durable_queues
+  essentials.durable-queues.transactional-mode=fullytransactional
+  essentials.durable-queues.polling-delay-interval-increment-factor=0.5
+  essentials.durable-queues.max-polling-interval=2s
+  # Only relevant if transactional-mode=singleoperationtransaction
+  # essentials.durable-queues.message-handling-timeout=5s
+  ```
 - `Inboxes`, `Outboxes` and `DurableLocalCommandBus` configured to use `PostgresqlDurableQueues`
 - `LocalEventBus` with bus-name `default` and Bean name `eventBus`
 - `ReactiveHandlersBeanPostProcessor` (for auto-registering `EventHandler` and `CommandHandler` Beans with the `EventBus`'s and `CommandBus` beans found in the `ApplicationContext`)
@@ -42,10 +43,10 @@ The following Essentials components are auto configured:
     - `essentials.event-store.use-event-stream-gap-handler=false`
 - `SeparateTablePerAggregateTypePersistenceStrategy` using `IdentifierColumnType.TEXT` for persisting `AggregateId`'s and `JSONColumnType.JSONB` for persisting Event and EventMetadata JSON payloads
     - ColumnTypes can be overridden by using Spring properties:
-    - ```
+  ```
        essentials.event-store.identifier-column-type=uuid
        essentials.event-store.json-column-type=jsonb
-      ```
+  ```
 - `EventStoreUnitOfWorkFactory` in the form of `SpringTransactionAwareEventStoreUnitOfWorkFactory`
 - `EventStoreEventBus` with an internal `LocalEventBus` with bus-name `EventStoreLocalBus`
 - `PersistableEventMapper` with basic setup. Override this bean if you need additional meta-data, such as event-id, event-type, event-order, event-timestamp, event-meta-data, correlation-id, tenant-id
@@ -57,6 +58,19 @@ The following Essentials components are auto configured:
       essentials.event-store.subscription-manager.snapshot-resume-points-every=2s
       essentials.event-store.subscription-manager.event-store-polling-interval=200
       ```
+
+## Example Transfer Money example
+
+This is a Saga like process, where a user requests an IntraBank Money Transfer, i.e. transfer of money between accounts
+that both belong to the same Bank.  
+The `TransferMoneyProcessor`, which is an [`EventProcessor`](https://github.com/cloudcreate-dk/essentials-project/tree/main/components/foundation#eventprocessor),
+tracks the `IntraBankMoneyTransfer` lifecycle and ensures that the **From** `Account` is withdrawn and the **To** `Account` is deposited.
+
+Flow:
+
+![Intra Bank Money Transfer Flow](img/TransferMoneyFlow.png)
+
+See `dk.cloudcreate.essentials.spring.examples.postgresql.cqrs.banking.TransferMoneyProcessor`
 
 ## Example Shipping flow
 
@@ -75,7 +89,7 @@ The `OrderShippingProcessorIT` integration-test coordinates the test flow:
 - Asynchronously the `shipOrdersInbox` will forward the `ShipOrder` command to the `CommandBus`
     - Note: the `Order` and `ShippingOrder` are correlated/linked through the `OrderId` (aggregates reference each other using id's)
 - The `OrderShippingProcessor.handle(ShipOrder)` command handler method reacts to the `ShipOrder` command
-    - ![Handling a Kafka Message using an Inbox](images/inbox.png)
+    - ![Handling a Kafka Message using an Inbox](https://github.com/cloudcreate-dk/essentials-project/blob/main/components/foundation/images/inbox.png)
     - It loads the corresponding `ShippingOrder` instance and performs an idempotency check - if the order is already **marked-as-shipped**
         - This idempotency check is necessary as we're using in Messaging we deal with At-Least-Once message delivery guarantee and delivery of the `ShipOrder` command can end up
           being delivered by the `Inbox` multiple times
@@ -85,8 +99,4 @@ The `OrderShippingProcessorIT` integration-test coordinates the test flow:
       event `ExternalOrderShipped`
     - The `ExternalOrderShipped` is then added to the `kafkaOutbox` of type `Outbox`, that the `ShippingEventKafkaPublisher` has configured
 - Asynchronously the `kafkaOutbox` will call its Message consumer (in this case a lambda) which uses a `KafkaTemplate` to publish the `ExternalOrderShipped` to a Kafka Topic
-    - ![Publishing a Kafka Message using an Outbox](images/outbox.png)
-
-## Example Transfer Money example
-
-See `dk.cloudcreate.essentials.spring.examples.postgresql.cqrs.banking.TransferMoneyProcessor` - will in the future be enhanced with an Event Modeling EventProcess example. 
+  - ![Publishing a Kafka Message using an Outbox](https://github.com/cloudcreate-dk/essentials-project/blob/main/components/foundation/images/outbox.png)

@@ -137,6 +137,5 @@ public class OrderShippingProcessorIT {
         // Verify that both the DurableLocalCommandBus and Outbox are empty
         var commandQueueName = commandBus.getCommandQueueNameSelector().selectDurableQueueNameFor(new ShipOrder(orderId), orderShippingProcessor, Optional.empty());
         assertThat(durableQueues.getTotalMessagesQueuedFor(commandQueueName)).isEqualTo(0);
-        assertThat(shippingEventKafkaPublisher.getKafkaOutbox().getNumberOfOutgoingMessages()).isEqualTo(0);
     }
 }

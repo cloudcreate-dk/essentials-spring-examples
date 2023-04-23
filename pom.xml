@@ -67,8 +67,8 @@
         <objenesis.version>3.3</objenesis.version>
         <assertj.version>3.24.2</assertj.version>
         <awaitility.version>4.2.0</awaitility.version>
-        <spring-boot.version>2.7.10</spring-boot.version>
-        <spring-kafka.version>2.9.7</spring-kafka.version>
+        <spring-boot.version>2.7.11</spring-boot.version>
+        <spring-kafka.version>2.9.8</spring-kafka.version>
         <spring-data-mongodb.version>3.4.11</spring-data-mongodb.version>
         <log4j-to-slf4j.version>2.20.0</log4j-to-slf4j.version>
     </properties>
@@ -119,7 +119,7 @@
             <dependency>
                 <groupId>org.mockito</groupId>
                 <artifactId>mockito-bom</artifactId>
-                <version>5.3.0</version>
+                <version>5.3.1</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>

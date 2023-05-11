@@ -20,7 +20,7 @@ import dk.cloudcreate.essentials.components.foundation.messaging.queue.DurableQu
 import dk.cloudcreate.essentials.components.foundation.reactive.command.DurableLocalCommandBus;
 import dk.cloudcreate.essentials.spring.examples.postgresql.cqrs.shipping.adapters.kafka.incoming.*;
 import dk.cloudcreate.essentials.spring.examples.postgresql.cqrs.shipping.adapters.kafka.outgoing.*;
-import dk.cloudcreate.essentials.spring.examples.postgresql.cqrs.shipping.commands.*;
+import dk.cloudcreate.essentials.spring.examples.postgresql.cqrs.shipping.commands.RegisterShippingOrder;
 import dk.cloudcreate.essentials.spring.examples.postgresql.cqrs.shipping.domain.ShippingDestinationAddress;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.producer.ProducerRecord;
@@ -135,7 +135,7 @@ public class OrderShippingProcessorIT {
         assertThat((CharSequence) ((ExternalOrderShipped) shippingRecordsReceived.get(0).value()).orderId).isEqualTo(orderId);
 
         // Verify that both the DurableLocalCommandBus and Outbox are empty
-        var commandQueueName = commandBus.getCommandQueueNameSelector().selectDurableQueueNameFor(new ShipOrder(orderId), orderShippingProcessor, Optional.empty());
+        var commandQueueName = commandBus.getCommandQueueName();
         assertThat(durableQueues.getTotalMessagesQueuedFor(commandQueueName)).isEqualTo(0);
     }
 }

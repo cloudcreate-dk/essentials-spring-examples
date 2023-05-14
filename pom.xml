@@ -60,16 +60,16 @@
         <java.version>11</java.version>
 
         <revision>DEV-SNAPSHOT</revision>
-        <essentials.version>0.9.5</essentials.version>
+        <essentials.version>0.9.6</essentials.version>
 
         <slf4j.version>1.7.36</slf4j.version>
         <postgresql.version>42.6.0</postgresql.version>
         <objenesis.version>3.3</objenesis.version>
         <assertj.version>3.24.2</assertj.version>
         <awaitility.version>4.2.0</awaitility.version>
-        <spring-boot.version>2.7.10</spring-boot.version>
-        <spring-kafka.version>2.9.7</spring-kafka.version>
-        <spring-data-mongodb.version>3.4.10</spring-data-mongodb.version>
+        <spring-boot.version>2.7.11</spring-boot.version>
+        <spring-kafka.version>2.9.8</spring-kafka.version>
+        <spring-data-mongodb.version>3.4.11</spring-data-mongodb.version>
         <log4j-to-slf4j.version>2.20.0</log4j-to-slf4j.version>
     </properties>
 
@@ -84,49 +84,49 @@
             <dependency>
                 <groupId>org.junit</groupId>
                 <artifactId>junit-bom</artifactId>
-                <version>5.9.2</version>
+                <version>5.9.3</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
             <dependency>
                 <groupId>org.testcontainers</groupId>
                 <artifactId>testcontainers-bom</artifactId>
-                <version>1.18.0</version>
+                <version>1.18.1</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
             <dependency>
                 <groupId>org.jdbi</groupId>
                 <artifactId>jdbi3-bom</artifactId>
-                <version>3.37.1</version>
+                <version>3.38.2</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
             <dependency>
                 <groupId>com.fasterxml.jackson</groupId>
                 <artifactId>jackson-bom</artifactId>
-                <version>2.14.2</version>
+                <version>2.15.0</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
             <dependency>
                 <groupId>io.projectreactor</groupId>
                 <artifactId>reactor-bom</artifactId>
-                <version>2020.0.30</version>
+                <version>2020.0.31</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
             <dependency>
                 <groupId>org.mockito</groupId>
                 <artifactId>mockito-bom</artifactId>
-                <version>5.2.0</version>
+                <version>5.3.1</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-framework-bom</artifactId>
-                <version>5.3.26</version>
+                <version>5.3.27</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -142,12 +142,12 @@
         <dependency>
             <groupId>org.apache.tomcat.embed</groupId>
             <artifactId>tomcat-embed-core</artifactId>
-            <version>9.0.73</version>
+            <version>9.0.75</version>
         </dependency>
         <dependency>
             <groupId>org.apache.tomcat.embed</groupId>
             <artifactId>tomcat-embed-websocket</artifactId>
-            <version>9.0.73</version>
+            <version>9.0.75</version>
         </dependency>
         <!-- Test -->
         <dependency>
@@ -242,12 +242,12 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-failsafe-plugin</artifactId>
-                    <version>3.0.0</version>
+                    <version>3.1.0</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
-                    <version>3.0.0</version>
+                    <version>3.1.0</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>

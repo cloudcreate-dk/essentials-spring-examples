@@ -16,13 +16,12 @@
 
 package dk.cloudcreate.essentials.spring.examples.postgresql.cqrs.shipping.adapters.kafka.outgoing;
 
-import dk.cloudcreate.essentials.components.eventsourced.eventstore.postgresql.eventstream.PersistedEvent;
-import dk.cloudcreate.essentials.components.eventsourced.eventstore.postgresql.subscription.*;
-import dk.cloudcreate.essentials.components.eventsourced.eventstore.postgresql.types.GlobalEventOrder;
-import dk.cloudcreate.essentials.components.foundation.messaging.RedeliveryPolicy;
-import dk.cloudcreate.essentials.components.foundation.messaging.eip.store_and_forward.*;
-import dk.cloudcreate.essentials.components.foundation.transaction.UnitOfWorkFactory;
-import dk.cloudcreate.essentials.components.foundation.types.SubscriberId;
+import dk.cloudcreate.essentials.components.eventsourced.eventstore.postgresql.eventstream.AggregateType;
+import dk.cloudcreate.essentials.components.eventsourced.eventstore.postgresql.processor.EventProcessor;
+import dk.cloudcreate.essentials.components.eventsourced.eventstore.postgresql.subscription.EventStoreSubscriptionManager;
+import dk.cloudcreate.essentials.components.foundation.messaging.MessageHandler;
+import dk.cloudcreate.essentials.components.foundation.messaging.eip.store_and_forward.Inboxes;
+import dk.cloudcreate.essentials.components.foundation.reactive.command.DurableLocalCommandBus;
 import dk.cloudcreate.essentials.spring.examples.postgresql.cqrs.shipping.domain.ShippingOrders;
 import dk.cloudcreate.essentials.spring.examples.postgresql.cqrs.shipping.domain.events.OrderShipped;
 import lombok.NonNull;
@@ -31,60 +30,44 @@ import org.apache.kafka.clients.producer.ProducerRecord;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
-import java.time.Duration;
-import java.util.Optional;
+import java.util.List;
 
 @Service
 @Slf4j
-public class ShippingEventKafkaPublisher {
-    public static final String SHIPPING_EVENTS_TOPIC_NAME = "shipping-events";
+public class ShippingEventKafkaPublisher extends EventProcessor {
+    public static final String                        SHIPPING_EVENTS_TOPIC_NAME = "shipping-events";
+    private final       KafkaTemplate<String, Object> kafkaTemplate;
 
-    private final Outbox kafkaOutbox;
 
-    public ShippingEventKafkaPublisher(@NonNull Outboxes outboxes,
+    public ShippingEventKafkaPublisher(@NonNull Inboxes inboxes,
+                                       @NonNull DurableLocalCommandBus commandBus,
                                        @NonNull EventStoreSubscriptionManager eventStoreSubscriptionManager,
-                                       @NonNull KafkaTemplate<String, Object> kafkaTemplate,
-                                       @NonNull UnitOfWorkFactory<?> unitOfWorkFactory) {
-        // Setup the outbox to forward to Kafka
-        kafkaOutbox = outboxes.getOrCreateOutbox(OutboxConfig.builder()
-                                                             .setOutboxName(OutboxName.of("ShippingOrder:KafkaShippingEvents"))
-                                                             .setRedeliveryPolicy(RedeliveryPolicy.fixedBackoff(Duration.ofMillis(100), 10))
-                                                             .setMessageConsumptionMode(MessageConsumptionMode.SingleGlobalConsumer)
-                                                             .setNumberOfParallelMessageConsumers(1)
-                                                             .build(),
-                                                 msg -> {
-                                                     var e = (ExternalOrderShippingEvent) msg.getPayload();
-                                                     log.info("*** Forwarding Outbox {} message to Kafka. Order '{}'", e.getClass().getSimpleName(), e.orderId);
-                                                     var producerRecord = new ProducerRecord<String, Object>(SHIPPING_EVENTS_TOPIC_NAME,
-                                                                                                             e.orderId.toString(),
-                                                                                                             e);
-                                                     kafkaTemplate.send(producerRecord);
-                                                     log.info("*** Completed sending event {} to Kafka. Order '{}'", e.getClass().getSimpleName(), e.orderId);
-                                                 });
-
-        // Subscribe ShippingOrder events and add only OrderShipped event to the Outbox as an ExternalOrderShipped event
-        eventStoreSubscriptionManager.subscribeToAggregateEventsAsynchronously(SubscriberId.of("ShippingEventKafkaPublisher-ShippingEvents"),
-                                                                               ShippingOrders.AGGREGATE_TYPE,
-                                                                               GlobalEventOrder.FIRST_GLOBAL_EVENT_ORDER,
-                                                                               Optional.empty(),
-                                                                               new PatternMatchingPersistedEventHandler() {
-                                                                                   @Override
-                                                                                   protected void handleUnmatchedEvent(PersistedEvent event) {
-                                                                                       // Ignore any events not explicitly handled - the original logic throws an exception to notify subscribers of unhandled events
-                                                                                   }
-
-                                                                                   @SubscriptionEventHandler
-                                                                                   void handle(OrderShipped e) {
-                                                                                       log.info("*** Received {} for Order '{}' and adding it to the Outbox as a {} message", e.getClass().getSimpleName(), e.orderId, ExternalOrderShipped.class.getSimpleName());
-                                                                                       unitOfWorkFactory.usingUnitOfWork(() -> kafkaOutbox.sendMessage(new ExternalOrderShipped(e.orderId)));
-                                                                                   }
-                                                                               });
+                                       @NonNull KafkaTemplate<String, Object> kafkaTemplate) {
+        super(eventStoreSubscriptionManager,
+              inboxes,
+              commandBus);
+        this.kafkaTemplate = kafkaTemplate;
     }
 
-    /**
-     * Only used for testing purposes
-     */
-    public Outbox getKafkaOutbox() {
-        return kafkaOutbox;
+    @Override
+    public String getProcessorName() {
+        return "ShippingEventsKafkaPublisher";
+    }
+
+    @Override
+    protected List<AggregateType> reactsToEventsRelatedToAggregateTypes() {
+        return List.of(ShippingOrders.AGGREGATE_TYPE);
+    }
+
+    @MessageHandler
+    void handle(OrderShipped e) {
+        log.info("*** Received {} for Order '{}' and adding it to the Outbox as a {} message", e.getClass().getSimpleName(), e.orderId, ExternalOrderShipped.class.getSimpleName());
+        var externalEvent = new ExternalOrderShipped(e.orderId);
+        log.info("*** Forwarding {} message to Kafka. Order '{}'", externalEvent.getClass().getSimpleName(), externalEvent.orderId);
+        var producerRecord = new ProducerRecord<String, Object>(SHIPPING_EVENTS_TOPIC_NAME,
+                                                                externalEvent.orderId.toString(),
+                                                                externalEvent);
+        kafkaTemplate.send(producerRecord);
+        log.info("*** Completed sending event {} to Kafka. Order '{}'", externalEvent.getClass().getSimpleName(), externalEvent.orderId);
     }
 }

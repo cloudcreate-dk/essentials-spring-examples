@@ -55,22 +55,21 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>11</maven.compiler.source>
-        <maven.compiler.target>11</maven.compiler.target>
-        <java.version>11</java.version>
+        <java.version>17</java.version>
 
         <revision>DEV-SNAPSHOT</revision>
-        <essentials.version>0.9.6</essentials.version>
+        <essentials.version>0.20.1</essentials.version>
 
-        <slf4j.version>1.7.36</slf4j.version>
+        <slf4j.version>2.0.7</slf4j.version>
         <postgresql.version>42.6.0</postgresql.version>
         <objenesis.version>3.3</objenesis.version>
         <assertj.version>3.24.2</assertj.version>
         <awaitility.version>4.2.0</awaitility.version>
-        <spring-boot.version>2.7.11</spring-boot.version>
-        <spring-kafka.version>2.9.8</spring-kafka.version>
-        <spring-data-mongodb.version>3.4.11</spring-data-mongodb.version>
+        <spring-boot.version>3.0.7</spring-boot.version>
+        <spring-kafka.version>3.0.7</spring-kafka.version>
+        <spring-data-mongodb.version>4.0.6</spring-data-mongodb.version>
         <log4j-to-slf4j.version>2.20.0</log4j-to-slf4j.version>
+        <json-smart.version>2.4.11</json-smart.version>
     </properties>
 
     <modules>
@@ -105,14 +104,14 @@
             <dependency>
                 <groupId>com.fasterxml.jackson</groupId>
                 <artifactId>jackson-bom</artifactId>
-                <version>2.15.0</version>
+                <version>2.15.1</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
             <dependency>
                 <groupId>io.projectreactor</groupId>
                 <artifactId>reactor-bom</artifactId>
-                <version>2020.0.31</version>
+                <version>2022.0.7</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -126,7 +125,7 @@
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-framework-bom</artifactId>
-                <version>5.3.27</version>
+                <version>6.0.9</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -138,16 +137,6 @@
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
             <version>${slf4j.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.tomcat.embed</groupId>
-            <artifactId>tomcat-embed-core</artifactId>
-            <version>9.0.75</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.tomcat.embed</groupId>
-            <artifactId>tomcat-embed-websocket</artifactId>
-            <version>9.0.75</version>
         </dependency>
         <!-- Test -->
         <dependency>
@@ -180,7 +169,7 @@
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
-            <version>1.2.12</version>
+            <version>1.4.7</version>
             <scope>test</scope>
         </dependency>
 
@@ -254,6 +243,8 @@
                     <artifactId>maven-compiler-plugin</artifactId>
                     <version>3.11.0</version>
                     <configuration>
+                        <source>${java.version}</source>
+                        <target>${java.version}</target>
                     </configuration>
                 </plugin>
                 <plugin>
@@ -322,7 +313,7 @@
                 <version>8.2.1</version>
                 <configuration>
                     <skipTestScope>false</skipTestScope>
-                    <failBuildOnAnyVulnerability>true</failBuildOnAnyVulnerability>
+                    <failBuildOnCVSS>0</failBuildOnCVSS>
                     <suppressionFile>${maven.multiModuleProjectDirectory}/project-suppression.xml</suppressionFile>
                 </configuration>
                 <executions>
@@ -336,7 +327,7 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>flatten-maven-plugin</artifactId>
-                <version>1.4.1</version>
+                <version>1.5.0</version>
                 <configuration>
                     <updatePomFile>true</updatePomFile>
                     <flattenMode>resolveCiFriendliesOnly</flattenMode>

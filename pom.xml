@@ -322,7 +322,7 @@
                 <version>8.2.1</version>
                 <configuration>
                     <skipTestScope>false</skipTestScope>
-                    <failBuildOnAnyVulnerability>true</failBuildOnAnyVulnerability>
+                    <failBuildOnCVSS>0</failBuildOnCVSS>
                     <suppressionFile>${maven.multiModuleProjectDirectory}/project-suppression.xml</suppressionFile>
                 </configuration>
                 <executions>

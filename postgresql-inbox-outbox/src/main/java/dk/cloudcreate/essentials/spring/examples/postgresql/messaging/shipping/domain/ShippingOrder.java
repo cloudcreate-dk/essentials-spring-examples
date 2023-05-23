@@ -18,9 +18,8 @@ package dk.cloudcreate.essentials.spring.examples.postgresql.messaging.shipping.
 
 import dk.cloudcreate.essentials.spring.examples.postgresql.messaging.shipping.OrderId;
 import dk.cloudcreate.essentials.spring.examples.postgresql.messaging.shipping.commands.RegisterShippingOrder;
+import jakarta.persistence.*;
 import lombok.*;
-
-import javax.persistence.*;
 
 @Entity
 @Data

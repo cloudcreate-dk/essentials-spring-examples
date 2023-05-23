@@ -60,16 +60,16 @@
         <java.version>11</java.version>
 
         <revision>DEV-SNAPSHOT</revision>
-        <essentials.version>0.9.6</essentials.version>
+        <essentials.version>0.9.7</essentials.version>
 
         <slf4j.version>1.7.36</slf4j.version>
         <postgresql.version>42.6.0</postgresql.version>
         <objenesis.version>3.3</objenesis.version>
         <assertj.version>3.24.2</assertj.version>
         <awaitility.version>4.2.0</awaitility.version>
-        <spring-boot.version>2.7.11</spring-boot.version>
-        <spring-kafka.version>2.9.8</spring-kafka.version>
-        <spring-data-mongodb.version>3.4.11</spring-data-mongodb.version>
+        <spring-boot.version>2.7.12</spring-boot.version>
+        <spring-kafka.version>2.9.9</spring-kafka.version>
+        <spring-data-mongodb.version>3.4.12</spring-data-mongodb.version>
         <log4j-to-slf4j.version>2.20.0</log4j-to-slf4j.version>
     </properties>
 
@@ -105,14 +105,14 @@
             <dependency>
                 <groupId>com.fasterxml.jackson</groupId>
                 <artifactId>jackson-bom</artifactId>
-                <version>2.15.0</version>
+                <version>2.15.1</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
             <dependency>
                 <groupId>io.projectreactor</groupId>
                 <artifactId>reactor-bom</artifactId>
-                <version>2020.0.31</version>
+                <version>2020.0.32</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>

@@ -3,6 +3,59 @@
 The example uses the `spring-boot-starter-postgresql` that provides Spring Boot auto-configuration for all Postgresql focused Essentials components.  
 All `@Beans` auto-configured by this library use `@ConditionalOnMissingBean` to allow for easy overriding.
 
+## Test the Shipping flow
+You can either run the `OrderShippingProcessorIT` (see `Shipping flow` for details about the example) 
+from within your IDE or using Maven `mvn verify -pl :postgresql-inbox-outbox` from the **root** of the `essentials-spring-examples` project folder.  
+
+Alternatively you can start the Spring Boot application standalone from the **root** of the `essentials-spring-examples` project folder using
+```bash
+docker compose up -d
+mvn spring-boot:run -pl :postgresql-inbox-outbox
+```
+
+The last command will block the current terminal, so to continue you need to open a new Terminal.
+
+### Initiate the test scenario:
+In a new Terminal enter the following command:
+```bash
+curl -L 'http://localhost:8080/shipping/register-order' \ 
+-X POST \
+-H 'Accept: application/json' \
+-H 'Content-Type: application/json' \
+-d '{
+  "orderId": "order1",
+  "destinationAddress": {
+   "recipientName": "John Doe",
+   "street": "Test Street 1",
+   "zipCode": "1234",
+   "city": "Test City"
+  }
+}'
+```
+### Complete the test scenario: 
+In the same Terminal enter the following command:
+```bash
+curl -L 'http://localhost:8080/shipping/ship-order' \ 
+-H 'Accept: application/json' \
+-H 'Content-Type: application/json' \
+-d '{
+  "orderId": "order1"
+}'
+```
+
+This will trigger the Shipping process.   
+In the Spring Root terminal you should be able to see log entries similar to:
+`... [postgresql-inbox-outbox,6489bcfa295fb799c0546e1bc9ef2a18,c7d669b64d5b6c71] ...`
+
+The second value in the example (`6489bcfa295fb799c0546e1bc9ef2a18`) is the `traceId`.
+If you open Grafana using `http://localhost:3000` and go to the `Logs, Traces, Metrics` Dashboard,
+then the `traceId` can be entered into the `Trace ID` text box.
+
+### Stop the test scenario:
+- Stop the Spring Boot Application by pressing Ctrl C
+- Stop Docker: `docker compose down`
+
+## Application Setup
 The following Essentials components are auto configured by the `EssentialsComponentsConfiguration`:
 - Jackson/FasterXML JSON modules:
   - `EssentialTypesJacksonModule`
@@ -17,6 +70,7 @@ The following Essentials components are auto configured by the `EssentialsCompon
     essentials.fenced-lock-manager.fenced-locks-table-name=fenced_locks
     essentials.fenced-lock-manager.lock-confirmation-interval=5s
     essentials.fenced-lock-manager.lock-time-out=12s
+    essentials.durable-queues.shared-queue-table-name=durable_queues
     ```
 - `PostgresqlDurableQueues` using the `essentialComponentsObjectMapper` as JSON serializer
   - Supports additional properties:
@@ -25,6 +79,7 @@ The following Essentials components are auto configured by the `EssentialsCompon
     essentials.durable-queues.transactional-mode=fullytransactional
     essentials.durable-queues.polling-delay-interval-increment-factor=0.5
     essentials.durable-queues.max-polling-interval=2s
+    essentials.durable-queues.verbose-tracing=false
     # Only relevant if transactional-mode=singleoperationtransaction
     # essentials.durable-queues.message-handling-timeout=5s
     ```
@@ -33,7 +88,7 @@ The following Essentials components are auto configured by the `EssentialsCompon
 - `ReactiveHandlersBeanPostProcessor` (for auto-registering `EventHandler` and `CommandHandler` Beans with the `EventBus`'s and `CommandBus` beans found in the `ApplicationContext`)
 - Automatically calling `Lifecycle.start()`/`Lifecycle.stop`, on any Beans implementing the `Lifecycle` interface, when the `ApplicationContext` is started/stopped
 
-## Example Shipping flow
+## Shipping flow
 
 The `OrderShippingProcessorIT` integration-test coordinates the test flow:
 - First a `ShippingOrder` aggregate is created, by sending `RegisterShippingOrder` over the `CommandBus`

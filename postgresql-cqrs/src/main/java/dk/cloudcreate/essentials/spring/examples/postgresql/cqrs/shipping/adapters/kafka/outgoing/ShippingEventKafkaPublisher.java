@@ -48,8 +48,7 @@ public class ShippingEventKafkaPublisher extends EventProcessor {
         super(eventStoreSubscriptionManager,
               inboxes,
               commandBus,
-              eventStore,
-              true);
+              eventStore);
         this.kafkaTemplate = kafkaTemplate;
     }
 

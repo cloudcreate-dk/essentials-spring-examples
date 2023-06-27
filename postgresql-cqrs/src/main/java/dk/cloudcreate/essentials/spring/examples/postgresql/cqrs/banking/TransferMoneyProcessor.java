@@ -53,8 +53,7 @@ public class TransferMoneyProcessor extends EventProcessor {
         super(eventStoreSubscriptionManager,
               inboxes,
               commandBus,
-              eventStore,
-              true);
+              eventStore);
         this.accounts = accounts;
         this.intraBankMoneyTransfers = intraBankMoneyTransfers;
     }

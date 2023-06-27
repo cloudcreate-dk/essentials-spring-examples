@@ -285,4 +285,13 @@
         <packageUrl regex="true">^pkg:maven/org\.junit\.vintage/junit\-vintage\-engine@.*$</packageUrl>
         <cpe>cpe:/a:fan_platform_project:fan_platform</cpe>
     </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: jackson-databind-2.15.2.jar
+   According to https://github.com/FasterXML/jackson-databind/issues/3972 this can lead to stackoverflow and
+   isn't a security vulnerability
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/com\.fasterxml\.jackson\.core/jackson\-databind@.*$</packageUrl>
+        <cve>CVE-2023-35116</cve>
+    </suppress>
 </suppressions>

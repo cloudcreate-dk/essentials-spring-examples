@@ -1,0 +1,15 @@
+server:
+    http_listen_port: 3200
+
+distributor:
+    receivers:
+        zipkin:
+
+storage:
+    trace:
+        backend: local
+        wal:
+            path: /tmp/tempo/wal
+            encoding: snappy
+        local:
+            path: /tmp/tempo/blocks

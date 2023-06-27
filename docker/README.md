@@ -1,0 +1,2 @@
+# Tracing, Latency and Metric Docker Setup 
+This docker setup for Prometheus, Grafana and Tempo is inspired by https://spring.io/blog/2022/10/12/observability-with-spring-boot-3 / https://github.com/marcingrzejszczak/observability-boot-blog-post

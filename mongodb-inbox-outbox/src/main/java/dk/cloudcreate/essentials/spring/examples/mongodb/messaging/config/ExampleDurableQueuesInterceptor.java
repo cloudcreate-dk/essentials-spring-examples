@@ -27,6 +27,12 @@ import java.util.*;
 @Component
 public class ExampleDurableQueuesInterceptor implements DurableQueuesInterceptor {
     private static final Logger log = LoggerFactory.getLogger(ExampleDurableQueuesInterceptor.class);
+    private DurableQueues durableQueues;
+
+    @Override
+    public void setDurableQueues(DurableQueues durableQueues) {
+        this.durableQueues = durableQueues;
+    }
 
     @Override
     public QueueEntryId intercept(QueueMessage operation, InterceptorChain<QueueMessage, QueueEntryId, DurableQueuesInterceptor> interceptorChain) {

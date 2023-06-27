@@ -16,6 +16,7 @@
 
 package dk.cloudcreate.essentials.spring.examples.postgresql.cqrs.banking;
 
+import dk.cloudcreate.essentials.components.eventsourced.eventstore.postgresql.EventStore;
 import dk.cloudcreate.essentials.components.eventsourced.eventstore.postgresql.eventstream.AggregateType;
 import dk.cloudcreate.essentials.components.eventsourced.eventstore.postgresql.processor.EventProcessor;
 import dk.cloudcreate.essentials.components.eventsourced.eventstore.postgresql.subscription.EventStoreSubscriptionManager;
@@ -47,10 +48,12 @@ public class TransferMoneyProcessor extends EventProcessor {
                                   @NonNull IntraBankMoneyTransfers intraBankMoneyTransfers,
                                   @NonNull EventStoreSubscriptionManager eventStoreSubscriptionManager,
                                   @NonNull Inboxes inboxes,
-                                  @NonNull DurableLocalCommandBus commandBus) {
+                                  @NonNull DurableLocalCommandBus commandBus,
+                                  @NonNull EventStore eventStore) {
         super(eventStoreSubscriptionManager,
               inboxes,
-              commandBus);
+              commandBus,
+              eventStore);
         this.accounts = accounts;
         this.intraBankMoneyTransfers = intraBankMoneyTransfers;
     }

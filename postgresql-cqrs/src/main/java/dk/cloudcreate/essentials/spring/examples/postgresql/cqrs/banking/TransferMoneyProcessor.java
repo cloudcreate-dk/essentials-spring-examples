@@ -23,7 +23,7 @@ import dk.cloudcreate.essentials.components.eventsourced.eventstore.postgresql.s
 import dk.cloudcreate.essentials.components.foundation.messaging.MessageHandler;
 import dk.cloudcreate.essentials.components.foundation.messaging.eip.store_and_forward.Inboxes;
 import dk.cloudcreate.essentials.components.foundation.reactive.command.DurableLocalCommandBus;
-import dk.cloudcreate.essentials.reactive.Handler;
+import dk.cloudcreate.essentials.reactive.command.CmdHandler;
 import dk.cloudcreate.essentials.spring.examples.postgresql.cqrs.banking.commands.RequestIntraBankMoneyTransfer;
 import dk.cloudcreate.essentials.spring.examples.postgresql.cqrs.banking.domain.account.*;
 import dk.cloudcreate.essentials.spring.examples.postgresql.cqrs.banking.domain.account.events.*;
@@ -69,7 +69,7 @@ public class TransferMoneyProcessor extends EventProcessor {
                        IntraBankMoneyTransfers.AGGREGATE_TYPE);
     }
 
-    @Handler
+    @CmdHandler
     public void handle(@NonNull RequestIntraBankMoneyTransfer cmd) {
         if (accounts.isAccountMissing(cmd.fromAccount)) {
             throw new TransactionException(msg("Couldn't find fromAccount with id '{}'", cmd.fromAccount));

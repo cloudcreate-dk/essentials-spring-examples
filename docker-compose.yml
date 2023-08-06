@@ -1,5 +1,9 @@
 version: '3.9'
 
+networks:
+  default:
+    name: essentials-spring-boot-examples
+
 services:
   postgresql:
     container_name: postgresql
@@ -38,7 +42,7 @@ services:
       KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
 
-# Tracing, Latency and Metric setup is inspired by https://spring.io/blog/2022/10/12/observability-with-spring-boot-3 / #https://github.com/marcingrzejszczak/observability-boot-blog-post
+# Tracing, Latency and Metric setup is inspired by https://spring.io/blog/2022/10/12/observability-with-spring-boot-3 / https://github.com/marcingrzejszczak/observability-boot-blog-post
   tempo:
     container_name: tempo
     image: grafana/tempo
@@ -48,8 +52,12 @@ services:
       - ./docker/tempo/tempo-local.yaml:/etc/tempo.yaml:ro
       - ${TMP_DIR:-/tmp}/tempo-data:/tmp/tempo
     ports:
-      - "14268"  # jaeger ingest
-      - "9411:9411" # zipkin
+      - "14268:14268"  # jaeger ingest
+      - "3200:3200"   # tempo
+      - "9095:9095" # tempo grpc
+      - "4317:4317"  # otlp grpc
+      - "4318:4318"  # otlp http
+      - "9411:9411"   # zipkin
 
   loki:
     container_name: loki

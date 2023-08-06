@@ -18,8 +18,10 @@ package dk.cloudcreate.essentials.spring.examples.postgresql.cqrs.shipping.domai
 
 import lombok.*;
 
-@Value
+@Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class ShippingDestinationAddress {
     public String recipientName;
     public String street;

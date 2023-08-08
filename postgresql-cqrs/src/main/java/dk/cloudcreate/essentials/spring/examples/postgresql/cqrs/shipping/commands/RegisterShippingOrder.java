@@ -20,7 +20,7 @@ import dk.cloudcreate.essentials.spring.examples.postgresql.cqrs.shipping.OrderI
 import dk.cloudcreate.essentials.spring.examples.postgresql.cqrs.shipping.domain.ShippingDestinationAddress;
 import lombok.*;
 
-@Value
+@Data
 public class RegisterShippingOrder {
     @NonNull
     public OrderId                    orderId;

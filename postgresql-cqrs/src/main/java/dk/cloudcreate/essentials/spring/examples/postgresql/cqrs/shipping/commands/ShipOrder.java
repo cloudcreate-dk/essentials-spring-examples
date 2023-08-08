@@ -19,7 +19,7 @@ package dk.cloudcreate.essentials.spring.examples.postgresql.cqrs.shipping.comma
 import dk.cloudcreate.essentials.spring.examples.postgresql.cqrs.shipping.OrderId;
 import lombok.*;
 
-@Value
+@Data
 public class ShipOrder {
     @NonNull
     public OrderId orderId;

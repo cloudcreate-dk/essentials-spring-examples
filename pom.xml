@@ -58,7 +58,7 @@
         <java.version>17</java.version>
 
         <revision>DEV-SNAPSHOT</revision>
-        <essentials.version>DEV-SNAPSHOT</essentials.version>
+        <essentials.version>0.20.5</essentials.version>
 
         <slf4j.version>2.0.7</slf4j.version>
         <postgresql.version>42.6.0</postgresql.version>

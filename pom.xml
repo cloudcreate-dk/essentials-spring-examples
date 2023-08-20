@@ -68,11 +68,11 @@
         <spring-boot.version>3.0.9</spring-boot.version>
         <spring-kafka.version>3.0.9</spring-kafka.version>
         <kafka-clients.version>3.5.1</kafka-clients.version>
-        <spring-data-mongodb.version>4.0.8</spring-data-mongodb.version>
+        <spring-data-mongodb.version>4.0.9</spring-data-mongodb.version>
         <log4j-to-slf4j.version>2.20.0</log4j-to-slf4j.version>
         <json-smart.version>2.5.0</json-smart.version>
-        <micrometer.version>1.11.2</micrometer.version>
-        <micrometer-tracing.version>1.1.3</micrometer-tracing.version>
+        <micrometer.version>1.11.3</micrometer.version>
+        <micrometer-tracing.version>1.1.4</micrometer-tracing.version>
         <lombok.version>1.18.28</lombok.version>
     </properties>
 
@@ -101,7 +101,7 @@
             <dependency>
                 <groupId>org.jdbi</groupId>
                 <artifactId>jdbi3-bom</artifactId>
-                <version>3.40.0</version>
+                <version>3.41.0</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -115,7 +115,7 @@
             <dependency>
                 <groupId>io.projectreactor</groupId>
                 <artifactId>reactor-bom</artifactId>
-                <version>2022.0.9</version>
+                <version>2022.0.10</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -256,7 +256,7 @@
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
-            <version>1.4.9</version>
+            <version>1.4.11</version>
         </dependency>
 
     </dependencies>
@@ -396,7 +396,7 @@
             <plugin>
                 <groupId>org.owasp</groupId>
                 <artifactId>dependency-check-maven</artifactId>
-                <version>8.3.1</version>
+                <version>8.4.0</version>
                 <configuration>
                     <skipTestScope>false</skipTestScope>
                     <failBuildOnCVSS>0</failBuildOnCVSS>

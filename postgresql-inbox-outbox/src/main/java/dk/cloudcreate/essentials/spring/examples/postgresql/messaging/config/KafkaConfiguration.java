@@ -63,7 +63,6 @@ public class KafkaConfiguration {
     @Bean
     public KafkaTemplate<String, Object> kafkaTemplate() {
         var kafkaTemplate = new KafkaTemplate<>(producerFactory());
-        kafkaTemplate.setObservationEnabled(true);
         return kafkaTemplate;
     }
 
@@ -71,7 +70,6 @@ public class KafkaConfiguration {
     public ConcurrentKafkaListenerContainerFactory<String, Object> kafkaListenerContainerFactory() {
         ConcurrentKafkaListenerContainerFactory<String, Object> factory = new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(consumerFactory());
-        factory.getContainerProperties().setObservationEnabled(true);
         return factory;
     }
 }

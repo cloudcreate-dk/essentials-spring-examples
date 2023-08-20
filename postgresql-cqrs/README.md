@@ -64,13 +64,7 @@ curl -L 'http://localhost:8080/shipping/ship-order' \
 }'
 ```
 
-This will trigger the Shipping process.   
-In the Spring Root terminal you should be able to see log entries similar to:
-`... [postgresql-cqrs,6489bcfa295fb799c0546e1bc9ef2a18,c7d669b64d5b6c71] ...`
-
-The second value in the example (`6489bcfa295fb799c0546e1bc9ef2a18`) is the `traceId`.
-If you open Grafana using `http://localhost:3000` and go to the `Logs, Traces, Metrics` Dashboard,
-then the `traceId` can be entered into the `Trace ID` text box.
+This will trigger the Shipping process.
 
 #### Stop the test scenario:
 - Stop the Spring Boot Application by pressing `Ctrl C`

@@ -58,21 +58,21 @@
         <java.version>17</java.version>
 
         <revision>DEV-SNAPSHOT</revision>
-        <essentials.version>0.20.4</essentials.version>
+        <essentials.version>0.20.5</essentials.version>
 
         <slf4j.version>2.0.7</slf4j.version>
         <postgresql.version>42.6.0</postgresql.version>
         <objenesis.version>3.3</objenesis.version>
         <assertj.version>3.24.2</assertj.version>
         <awaitility.version>4.2.0</awaitility.version>
-        <spring-boot.version>3.0.8</spring-boot.version>
-        <spring-kafka.version>3.0.8</spring-kafka.version>
-        <kafka-clients.version>3.5.0</kafka-clients.version>
-        <spring-data-mongodb.version>4.0.7</spring-data-mongodb.version>
+        <spring-boot.version>3.0.9</spring-boot.version>
+        <spring-kafka.version>3.0.9</spring-kafka.version>
+        <kafka-clients.version>3.5.1</kafka-clients.version>
+        <spring-data-mongodb.version>4.0.9</spring-data-mongodb.version>
         <log4j-to-slf4j.version>2.20.0</log4j-to-slf4j.version>
-        <json-smart.version>2.4.11</json-smart.version>
-        <micrometer.version>1.11.1</micrometer.version>
-        <micrometer-tracing.version>1.1.2</micrometer-tracing.version>
+        <json-smart.version>2.5.0</json-smart.version>
+        <micrometer.version>1.11.3</micrometer.version>
+        <micrometer-tracing.version>1.1.4</micrometer-tracing.version>
         <lombok.version>1.18.28</lombok.version>
     </properties>
 
@@ -87,7 +87,7 @@
             <dependency>
                 <groupId>org.junit</groupId>
                 <artifactId>junit-bom</artifactId>
-                <version>5.9.3</version>
+                <version>5.10.0</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -101,7 +101,7 @@
             <dependency>
                 <groupId>org.jdbi</groupId>
                 <artifactId>jdbi3-bom</artifactId>
-                <version>3.39.1</version>
+                <version>3.41.0</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -115,7 +115,7 @@
             <dependency>
                 <groupId>io.projectreactor</groupId>
                 <artifactId>reactor-bom</artifactId>
-                <version>2022.0.8</version>
+                <version>2022.0.10</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -129,7 +129,7 @@
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-framework-bom</artifactId>
-                <version>6.0.10</version>
+                <version>6.0.11</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -140,7 +140,7 @@
         <dependency>
             <groupId>org.xerial.snappy</groupId>
             <artifactId>snappy-java</artifactId>
-            <version>1.1.10.1</version>
+            <version>1.1.10.3</version>
         </dependency>
 
         <!-- Tracing, Latency and Metric setup is inspired by https://spring.io/blog/2022/10/12/observability-with-spring-boot-3 / https://github.com/marcingrzejszczak/observability-boot-blog-post -->
@@ -164,6 +164,14 @@
             <artifactId>micrometer-tracing</artifactId>
             <version>${micrometer-tracing.version}</version>
         </dependency>
+
+        <!-- Metrics -->
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-registry-prometheus</artifactId>
+            <version>${micrometer.version}</version>
+            <scope>runtime</scope>
+        </dependency>
         <dependency>
             <groupId>io.prometheus</groupId>
             <artifactId>simpleclient</artifactId>
@@ -174,18 +182,13 @@
             <artifactId>simpleclient_hotspot</artifactId>
             <version>0.16.0</version>
         </dependency>
+
+        <!-- Brave Tracing/Latency -->
         <!-- Tracing -->
         <dependency>
             <groupId>io.micrometer</groupId>
             <artifactId>micrometer-tracing-bridge-brave</artifactId>
             <version>${micrometer-tracing.version}</version>
-        </dependency>
-        <!-- Metrics -->
-        <dependency>
-            <groupId>io.micrometer</groupId>
-            <artifactId>micrometer-registry-prometheus</artifactId>
-            <version>${micrometer.version}</version>
-            <scope>runtime</scope>
         </dependency>
         <!-- Latency -->
         <dependency>
@@ -194,6 +197,22 @@
             <version>2.16.4</version>
             <scope>runtime</scope>
         </dependency>
+
+        <!-- OpenTelemetry Tracing/Latency-->
+<!--        &lt;!&ndash; For Tracing &ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>io.micrometer</groupId>-->
+<!--            <artifactId>micrometer-tracing-bridge-otel</artifactId>-->
+<!--            <version>${micrometer-tracing.version}</version>-->
+<!--        </dependency>-->
+<!--        &lt;!&ndash; For Latency Visualization &ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>io.opentelemetry</groupId>-->
+<!--            <artifactId>opentelemetry-exporter-zipkin</artifactId>-->
+<!--            <version>1.28.0</version>-->
+<!--        </dependency>-->
+
+
         <dependency>
             <groupId>com.github.loki4j</groupId>
             <artifactId>loki-logback-appender</artifactId>
@@ -237,7 +256,7 @@
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
-            <version>1.4.8</version>
+            <version>1.4.11</version>
         </dependency>
 
     </dependencies>
@@ -377,7 +396,7 @@
             <plugin>
                 <groupId>org.owasp</groupId>
                 <artifactId>dependency-check-maven</artifactId>
-                <version>8.3.1</version>
+                <version>8.4.0</version>
                 <configuration>
                     <skipTestScope>false</skipTestScope>
                     <failBuildOnCVSS>0</failBuildOnCVSS>

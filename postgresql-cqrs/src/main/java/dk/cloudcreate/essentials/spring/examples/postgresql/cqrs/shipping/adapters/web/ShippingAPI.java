@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package dk.cloudcreate.essentials.spring.examples.postgresql.messaging.shipping.web;
+package dk.cloudcreate.essentials.spring.examples.postgresql.cqrs.shipping.adapters.web;
 
 import dk.cloudcreate.essentials.reactive.command.CommandBus;
-import dk.cloudcreate.essentials.spring.examples.postgresql.messaging.shipping.commands.*;
+import dk.cloudcreate.essentials.spring.examples.postgresql.cqrs.shipping.commands.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

@@ -18,6 +18,7 @@ package dk.cloudcreate.essentials.spring.examples.postgresql.cqrs.banking;
 
 import dk.cloudcreate.essentials.components.foundation.transaction.*;
 import dk.cloudcreate.essentials.reactive.command.CommandBus;
+import dk.cloudcreate.essentials.spring.examples.postgresql.cqrs.TestApplication;
 import dk.cloudcreate.essentials.spring.examples.postgresql.cqrs.banking.commands.RequestIntraBankMoneyTransfer;
 import dk.cloudcreate.essentials.spring.examples.postgresql.cqrs.banking.domain.account.*;
 import dk.cloudcreate.essentials.spring.examples.postgresql.cqrs.banking.domain.transactions.intrabank.*;
@@ -38,7 +39,7 @@ import java.time.Duration;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@SpringBootTest
+@SpringBootTest(classes = TestApplication.class)
 @Testcontainers
 @Slf4j
 @DirtiesContext

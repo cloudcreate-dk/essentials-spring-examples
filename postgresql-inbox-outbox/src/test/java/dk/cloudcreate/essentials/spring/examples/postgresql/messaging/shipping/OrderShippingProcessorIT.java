@@ -18,6 +18,7 @@ package dk.cloudcreate.essentials.spring.examples.postgresql.messaging.shipping;
 
 import dk.cloudcreate.essentials.components.foundation.messaging.queue.DurableQueues;
 import dk.cloudcreate.essentials.components.foundation.reactive.command.DurableLocalCommandBus;
+import dk.cloudcreate.essentials.spring.examples.postgresql.messaging.TestApplication;
 import dk.cloudcreate.essentials.spring.examples.postgresql.messaging.shipping.adapters.kafka.incoming.*;
 import dk.cloudcreate.essentials.spring.examples.postgresql.messaging.shipping.adapters.kafka.outgoing.*;
 import dk.cloudcreate.essentials.spring.examples.postgresql.messaging.shipping.commands.RegisterShippingOrder;
@@ -43,7 +44,7 @@ import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@SpringBootTest
+@SpringBootTest(classes = TestApplication.class)
 @Testcontainers
 @DirtiesContext
 public class OrderShippingProcessorIT {

@@ -14,13 +14,14 @@
  * limitations under the License.
  */
 
-package dk.cloudcreate.essentials.spring.examples.postgresql.cqrs.shipping.commands;
+package dk.cloudcreate.essentials.spring.examples.postgresql.cqrs;
 
-import dk.cloudcreate.essentials.spring.examples.postgresql.cqrs.shipping.OrderId;
-import lombok.*;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-@Data
-public class ShipOrder {
-    @NonNull
-    public OrderId orderId;
+@SpringBootApplication
+public class Application {
+    public static void main(String[] args) {
+        SpringApplication.run(Application.class, args);
+    }
 }

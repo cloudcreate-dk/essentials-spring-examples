@@ -58,17 +58,17 @@
         <java.version>17</java.version>
 
         <revision>DEV-SNAPSHOT</revision>
-        <essentials.version>0.20.6</essentials.version>
+        <essentials.version>0.30.0</essentials.version>
 
         <slf4j.version>2.0.9</slf4j.version>
         <postgresql.version>42.6.0</postgresql.version>
         <objenesis.version>3.3</objenesis.version>
         <assertj.version>3.24.2</assertj.version>
         <awaitility.version>4.2.0</awaitility.version>
-        <spring-boot.version>3.0.12</spring-boot.version>
+        <spring-boot.version>3.1.5</spring-boot.version>
         <spring-kafka.version>3.0.12</spring-kafka.version>
         <kafka-clients.version>3.6.0</kafka-clients.version>
-        <spring-data-mongodb.version>4.0.11</spring-data-mongodb.version>
+        <spring-data-mongodb.version>4.1.5</spring-data-mongodb.version>
         <log4j-to-slf4j.version>2.21.0</log4j-to-slf4j.version>
         <json-smart.version>2.5.0</json-smart.version>
         <micrometer.version>1.11.5</micrometer.version>

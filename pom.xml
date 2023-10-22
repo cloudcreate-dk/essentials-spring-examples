@@ -60,17 +60,17 @@
         <java.version>11</java.version>
 
         <revision>DEV-SNAPSHOT</revision>
-        <essentials.version>0.9.11</essentials.version>
+        <essentials.version>0.9.12</essentials.version>
 
         <slf4j.version>1.7.36</slf4j.version>
         <postgresql.version>42.6.0</postgresql.version>
         <objenesis.version>3.3</objenesis.version>
         <assertj.version>3.24.2</assertj.version>
         <awaitility.version>4.2.0</awaitility.version>
-        <spring-boot.version>2.7.14</spring-boot.version>
-        <spring-kafka.version>2.9.10</spring-kafka.version>
-        <spring-data-mongodb.version>3.4.15</spring-data-mongodb.version>
-        <log4j-to-slf4j.version>2.20.0</log4j-to-slf4j.version>
+        <spring-boot.version>2.7.17</spring-boot.version>
+        <spring-kafka.version>2.9.13</spring-kafka.version>
+        <spring-data-mongodb.version>3.4.17</spring-data-mongodb.version>
+        <log4j-to-slf4j.version>2.21.0</log4j-to-slf4j.version>
     </properties>
 
     <modules>
@@ -91,42 +91,42 @@
             <dependency>
                 <groupId>org.testcontainers</groupId>
                 <artifactId>testcontainers-bom</artifactId>
-                <version>1.18.3</version>
+                <version>1.19.1</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
             <dependency>
                 <groupId>org.jdbi</groupId>
                 <artifactId>jdbi3-bom</artifactId>
-                <version>3.41.0</version>
+                <version>3.41.3</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
             <dependency>
                 <groupId>com.fasterxml.jackson</groupId>
                 <artifactId>jackson-bom</artifactId>
-                <version>2.15.2</version>
+                <version>2.15.3</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
             <dependency>
                 <groupId>io.projectreactor</groupId>
                 <artifactId>reactor-bom</artifactId>
-                <version>2020.0.35</version>
+                <version>2020.0.37</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
             <dependency>
                 <groupId>org.mockito</groupId>
                 <artifactId>mockito-bom</artifactId>
-                <version>5.4.0</version>
+                <version>5.6.0</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-framework-bom</artifactId>
-                <version>5.3.29</version>
+                <version>5.3.30</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -137,7 +137,7 @@
         <dependency>
             <groupId>org.xerial.snappy</groupId>
             <artifactId>snappy-java</artifactId>
-            <version>1.1.10.3</version>
+            <version>1.1.10.5</version>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -147,12 +147,12 @@
         <dependency>
             <groupId>org.apache.tomcat.embed</groupId>
             <artifactId>tomcat-embed-core</artifactId>
-            <version>9.0.79</version>
+            <version>9.0.82</version>
         </dependency>
         <dependency>
             <groupId>org.apache.tomcat.embed</groupId>
             <artifactId>tomcat-embed-websocket</artifactId>
-            <version>9.0.79</version>
+            <version>9.0.82</version>
         </dependency>
         <!-- Test -->
         <dependency>
@@ -242,7 +242,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-javadoc-plugin</artifactId>
-                    <version>3.5.0</version>
+                    <version>3.6.0</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -264,7 +264,7 @@
                 <plugin>
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>versions-maven-plugin</artifactId>
-                    <version>2.16.0</version>
+                    <version>2.16.1</version>
                 </plugin>
             </plugins>
         </pluginManagement>
@@ -288,7 +288,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-enforcer-plugin</artifactId>
-                <version>3.3.0</version>
+                <version>3.4.1</version>
                 <executions>
                     <execution>
                         <id>enforce-maven</id>
@@ -324,7 +324,7 @@
             <plugin>
                 <groupId>org.owasp</groupId>
                 <artifactId>dependency-check-maven</artifactId>
-                <version>8.4.0</version>
+                <version>8.4.1</version>
                 <configuration>
                     <skipTestScope>false</skipTestScope>
                     <failBuildOnCVSS>0</failBuildOnCVSS>

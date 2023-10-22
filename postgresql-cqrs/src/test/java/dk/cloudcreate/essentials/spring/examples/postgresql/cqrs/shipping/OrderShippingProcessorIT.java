@@ -134,6 +134,7 @@ public class OrderShippingProcessorIT {
                   .untilAsserted(() -> assertThat(shippingRecordsReceived.size()).isEqualTo(1));
         assertThat(shippingRecordsReceived.get(0).value()).isInstanceOf(ExternalOrderShipped.class);
         assertThat((CharSequence) ((ExternalOrderShipped) shippingRecordsReceived.get(0).value()).orderId).isEqualTo(orderId);
+        assertThat(((ExternalOrderShipped) shippingRecordsReceived.get(0).value()).eventOrder).isEqualTo(1L);
 
         // Verify that both the DurableLocalCommandBus and Outbox are empty
         var commandQueueName = commandBus.getCommandQueueName();

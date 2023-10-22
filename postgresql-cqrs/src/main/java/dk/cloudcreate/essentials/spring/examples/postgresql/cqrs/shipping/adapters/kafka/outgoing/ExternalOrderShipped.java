@@ -22,7 +22,8 @@ import lombok.*;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public class ExternalOrderShipped extends ExternalOrderShippingEvent {
-    public ExternalOrderShipped(@NonNull OrderId orderId) {
-        super(orderId);
+    public ExternalOrderShipped(@NonNull OrderId orderId, long eventOrder) {
+        super(orderId, eventOrder);
     }
+
 }

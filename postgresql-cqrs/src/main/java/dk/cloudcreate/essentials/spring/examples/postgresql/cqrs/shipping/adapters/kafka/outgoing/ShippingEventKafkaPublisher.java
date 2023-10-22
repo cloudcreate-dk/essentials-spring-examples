@@ -22,6 +22,7 @@ import dk.cloudcreate.essentials.components.eventsourced.eventstore.postgresql.p
 import dk.cloudcreate.essentials.components.eventsourced.eventstore.postgresql.subscription.EventStoreSubscriptionManager;
 import dk.cloudcreate.essentials.components.foundation.messaging.MessageHandler;
 import dk.cloudcreate.essentials.components.foundation.messaging.eip.store_and_forward.Inboxes;
+import dk.cloudcreate.essentials.components.foundation.messaging.queue.OrderedMessage;
 import dk.cloudcreate.essentials.components.foundation.reactive.command.DurableLocalCommandBus;
 import dk.cloudcreate.essentials.spring.examples.postgresql.cqrs.shipping.domain.ShippingOrders;
 import dk.cloudcreate.essentials.spring.examples.postgresql.cqrs.shipping.domain.events.OrderShipped;
@@ -63,9 +64,9 @@ public class ShippingEventKafkaPublisher extends EventProcessor {
     }
 
     @MessageHandler
-    void handle(OrderShipped e) {
+    void handle(OrderShipped e, OrderedMessage eventMessage) {
         log.info("*** Received {} for Order '{}' and adding it to the Outbox as a {} message", e.getClass().getSimpleName(), e.orderId, ExternalOrderShipped.class.getSimpleName());
-        var externalEvent = new ExternalOrderShipped(e.orderId);
+        var externalEvent = new ExternalOrderShipped(e.orderId, eventMessage.getOrder());
         log.info("*** Forwarding {} message to Kafka. Order '{}'", externalEvent.getClass().getSimpleName(), externalEvent.orderId);
         var producerRecord = new ProducerRecord<String, Object>(SHIPPING_EVENTS_TOPIC_NAME,
                                                                 externalEvent.orderId.toString(),

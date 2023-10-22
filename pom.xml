@@ -58,22 +58,22 @@
         <java.version>17</java.version>
 
         <revision>DEV-SNAPSHOT</revision>
-        <essentials.version>0.20.5</essentials.version>
+        <essentials.version>0.20.6</essentials.version>
 
-        <slf4j.version>2.0.7</slf4j.version>
+        <slf4j.version>2.0.9</slf4j.version>
         <postgresql.version>42.6.0</postgresql.version>
         <objenesis.version>3.3</objenesis.version>
         <assertj.version>3.24.2</assertj.version>
         <awaitility.version>4.2.0</awaitility.version>
-        <spring-boot.version>3.0.9</spring-boot.version>
-        <spring-kafka.version>3.0.9</spring-kafka.version>
-        <kafka-clients.version>3.5.1</kafka-clients.version>
-        <spring-data-mongodb.version>4.0.9</spring-data-mongodb.version>
-        <log4j-to-slf4j.version>2.20.0</log4j-to-slf4j.version>
+        <spring-boot.version>3.0.12</spring-boot.version>
+        <spring-kafka.version>3.0.12</spring-kafka.version>
+        <kafka-clients.version>3.6.0</kafka-clients.version>
+        <spring-data-mongodb.version>4.0.11</spring-data-mongodb.version>
+        <log4j-to-slf4j.version>2.21.0</log4j-to-slf4j.version>
         <json-smart.version>2.5.0</json-smart.version>
-        <micrometer.version>1.11.3</micrometer.version>
-        <micrometer-tracing.version>1.1.4</micrometer-tracing.version>
-        <lombok.version>1.18.28</lombok.version>
+        <micrometer.version>1.11.5</micrometer.version>
+        <micrometer-tracing.version>1.1.6</micrometer-tracing.version>
+        <lombok.version>1.18.30</lombok.version>
     </properties>
 
     <modules>
@@ -94,42 +94,42 @@
             <dependency>
                 <groupId>org.testcontainers</groupId>
                 <artifactId>testcontainers-bom</artifactId>
-                <version>1.18.3</version>
+                <version>1.19.1</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
             <dependency>
                 <groupId>org.jdbi</groupId>
                 <artifactId>jdbi3-bom</artifactId>
-                <version>3.41.0</version>
+                <version>3.41.3</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
             <dependency>
                 <groupId>com.fasterxml.jackson</groupId>
                 <artifactId>jackson-bom</artifactId>
-                <version>2.15.2</version>
+                <version>2.15.3</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
             <dependency>
                 <groupId>io.projectreactor</groupId>
                 <artifactId>reactor-bom</artifactId>
-                <version>2022.0.10</version>
+                <version>2022.0.12</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
             <dependency>
                 <groupId>org.mockito</groupId>
                 <artifactId>mockito-bom</artifactId>
-                <version>5.4.0</version>
+                <version>5.6.0</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-framework-bom</artifactId>
-                <version>6.0.11</version>
+                <version>6.0.13</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -140,7 +140,7 @@
         <dependency>
             <groupId>org.xerial.snappy</groupId>
             <artifactId>snappy-java</artifactId>
-            <version>1.1.10.3</version>
+            <version>1.1.10.5</version>
         </dependency>
 
         <!-- Tracing, Latency and Metric setup is inspired by https://spring.io/blog/2022/10/12/observability-with-spring-boot-3 / https://github.com/marcingrzejszczak/observability-boot-blog-post -->
@@ -216,7 +216,7 @@
         <dependency>
             <groupId>com.github.loki4j</groupId>
             <artifactId>loki-logback-appender</artifactId>
-            <version>1.4.1</version>
+            <version>1.4.2</version>
             <scope>runtime</scope>
         </dependency>
 
@@ -312,7 +312,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-javadoc-plugin</artifactId>
-                    <version>3.5.0</version>
+                    <version>3.6.0</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -336,7 +336,7 @@
                 <plugin>
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>versions-maven-plugin</artifactId>
-                    <version>2.16.0</version>
+                    <version>2.16.1</version>
                 </plugin>
             </plugins>
         </pluginManagement>
@@ -360,7 +360,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-enforcer-plugin</artifactId>
-                <version>3.3.0</version>
+                <version>3.4.1</version>
                 <executions>
                     <execution>
                         <id>enforce-maven</id>
@@ -396,7 +396,7 @@
             <plugin>
                 <groupId>org.owasp</groupId>
                 <artifactId>dependency-check-maven</artifactId>
-                <version>8.4.0</version>
+                <version>8.4.1</version>
                 <configuration>
                     <skipTestScope>false</skipTestScope>
                     <failBuildOnCVSS>0</failBuildOnCVSS>

@@ -25,4 +25,5 @@ import lombok.*;
 public abstract class ExternalOrderShippingEvent {
     @NonNull
     public final OrderId orderId;
+    public final long    eventOrder;
 }

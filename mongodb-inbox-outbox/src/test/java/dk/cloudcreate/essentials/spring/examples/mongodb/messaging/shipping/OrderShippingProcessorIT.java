@@ -17,6 +17,7 @@
 package dk.cloudcreate.essentials.spring.examples.mongodb.messaging.shipping;
 
 import dk.cloudcreate.essentials.reactive.command.CommandBus;
+import dk.cloudcreate.essentials.spring.examples.mongodb.messaging.TestApplication;
 import dk.cloudcreate.essentials.spring.examples.mongodb.messaging.shipping.adapters.kafka.incoming.*;
 import dk.cloudcreate.essentials.spring.examples.mongodb.messaging.shipping.adapters.kafka.outgoing.*;
 import dk.cloudcreate.essentials.spring.examples.mongodb.messaging.shipping.commands.RegisterShippingOrder;
@@ -42,7 +43,7 @@ import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@SpringBootTest
+@SpringBootTest(classes = TestApplication.class)
 @Testcontainers
 @DirtiesContext
 public class OrderShippingProcessorIT {

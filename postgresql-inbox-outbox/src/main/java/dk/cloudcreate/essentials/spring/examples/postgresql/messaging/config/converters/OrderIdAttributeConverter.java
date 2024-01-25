@@ -14,27 +14,16 @@
  * limitations under the License.
  */
 
-package dk.cloudcreate.essentials.spring.examples.postgresql.messaging.shipping.domain;
+package dk.cloudcreate.essentials.spring.examples.postgresql.messaging.config.converters;
 
 import dk.cloudcreate.essentials.spring.examples.postgresql.messaging.shipping.OrderId;
-import lombok.NonNull;
-import org.springframework.data.jpa.repository.JpaRepository;
+import dk.cloudcreate.essentials.types.springdata.jpa.converters.BaseCharSequenceTypeAttributeConverter;
+import jakarta.persistence.Converter;
 
-import java.util.*;
-
-public interface ShippingOrders extends JpaRepository<ShippingOrder, OrderId> {
-    default Optional<ShippingOrder> findOrder(@NonNull OrderId orderId) {
-        return findById(orderId);
+@Converter(autoApply = true)
+public class OrderIdAttributeConverter extends BaseCharSequenceTypeAttributeConverter<OrderId> {
+    @Override
+    protected Class<OrderId> getConcreteCharSequenceType() {
+        return OrderId.class;
     }
-
-    default ShippingOrder getOrder(@NonNull OrderId orderId) {
-        return findOrder(orderId).get();
-    }
-
-    default void registerNewOrder(@NonNull ShippingOrder order) {
-        save(order);
-    }
-
-    List<ShippingOrder> findByShipped(boolean shippedStatus);
-    List<ShippingOrder> findByIdIn(List<OrderId> ids);
 }

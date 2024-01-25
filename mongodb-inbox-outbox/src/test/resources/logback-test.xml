@@ -30,7 +30,8 @@
 
     <!-- Set to TRACE to see detailed queue logs -->
     <logger name="dk.cloudcreate.essentials.components.queue" level="INFO"/>
-    <logger name="dk.cloudcreate.essentials.components.foundation.messaging.queue" level="INFO"/>
+    <logger name="dk.cloudcreate.essentials.components.foundation.messaging.queue.DurableQueueConsumer" level="INFO"/>
+    <logger name="dk.cloudcreate.essentials.components.foundation.messaging.queue.DurableQueueConsumer.MessageHandlingFailures" level="DEBUG"/>
 
     <root level="INFO">
         <appender-ref ref="STDOUT"/>

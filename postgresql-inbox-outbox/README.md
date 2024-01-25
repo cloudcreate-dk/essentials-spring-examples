@@ -13,7 +13,7 @@ from within your IDE or using Maven `mvn verify -pl :postgresql-inbox-outbox` fr
 Alternatively you can start the Spring Boot application standalone from the **root** of the `essentials-spring-examples` project folder using
 ```bash
 docker compose up -d
-mvn spring-boot:run -pl :postgresql-inbox-outbox
+mvn spring-boot:run -pl :mongodb-inbox-outbox
 ```
 
 The last command will block the current terminal, so to continue you need to open a new Terminal.
@@ -58,7 +58,7 @@ then the `traceId` can be entered into the `Trace ID` text box.
 - Stop the Spring Boot Application by pressing `Ctrl C`
 - Stop Docker: 
   ```bash
-    docker compose down
+    docker compose down -v
   ```
 
 ## Shipping flow explained

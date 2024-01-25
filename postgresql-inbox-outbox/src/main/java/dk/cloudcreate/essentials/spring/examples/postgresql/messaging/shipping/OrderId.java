@@ -17,13 +17,28 @@
 package dk.cloudcreate.essentials.spring.examples.postgresql.messaging.shipping;
 
 import dk.cloudcreate.essentials.types.CharSequenceType;
+import jakarta.persistence.Embeddable;
 
 import java.util.UUID;
 
+@Embeddable
 public class OrderId extends CharSequenceType<OrderId> {
+    /**
+     * Required as otherwise JPA/Hibernate complains with "dk.cloudcreate.essentials.spring.examples.postgresql.messaging.shipping.OrderId has no persistent id property"
+     * as it has problems with supporting SingleValueType immutable objects for identifier fields (as SingleValueType doesn't contain the necessary JPA annotations)
+     */
+    private String orderId;
 
     protected OrderId(CharSequence value) {
         super(value);
+        orderId = value.toString();
+    }
+
+    /**
+     * Is required by JPA
+     */
+    protected OrderId() {
+        super("null");
     }
 
     public static OrderId random() {

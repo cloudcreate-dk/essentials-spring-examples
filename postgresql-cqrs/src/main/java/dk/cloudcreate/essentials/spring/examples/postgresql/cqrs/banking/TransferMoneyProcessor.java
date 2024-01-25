@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2024 the original author or authors.
+ * Copyright 2021-2023 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,8 +17,11 @@
 package dk.cloudcreate.essentials.spring.examples.postgresql.cqrs.banking;
 
 import dk.cloudcreate.essentials.components.eventsourced.eventstore.postgresql.eventstream.AggregateType;
-import dk.cloudcreate.essentials.components.eventsourced.eventstore.postgresql.processor.*;
+import dk.cloudcreate.essentials.components.eventsourced.eventstore.postgresql.processor.EventProcessor;
+import dk.cloudcreate.essentials.components.eventsourced.eventstore.postgresql.subscription.EventStoreSubscriptionManager;
 import dk.cloudcreate.essentials.components.foundation.messaging.MessageHandler;
+import dk.cloudcreate.essentials.components.foundation.messaging.eip.store_and_forward.Inboxes;
+import dk.cloudcreate.essentials.components.foundation.reactive.command.DurableLocalCommandBus;
 import dk.cloudcreate.essentials.reactive.command.CmdHandler;
 import dk.cloudcreate.essentials.spring.examples.postgresql.cqrs.banking.commands.RequestIntraBankMoneyTransfer;
 import dk.cloudcreate.essentials.spring.examples.postgresql.cqrs.banking.domain.account.*;
@@ -42,8 +45,12 @@ public class TransferMoneyProcessor extends EventProcessor {
 
     public TransferMoneyProcessor(@NonNull Accounts accounts,
                                   @NonNull IntraBankMoneyTransfers intraBankMoneyTransfers,
-                                  @NonNull EventProcessorDependencies eventProcessorDependencies) {
-        super(eventProcessorDependencies);
+                                  @NonNull EventStoreSubscriptionManager eventStoreSubscriptionManager,
+                                  @NonNull Inboxes inboxes,
+                                  @NonNull DurableLocalCommandBus commandBus) {
+        super(eventStoreSubscriptionManager,
+              inboxes,
+              commandBus);
         this.accounts = accounts;
         this.intraBankMoneyTransfers = intraBankMoneyTransfers;
     }

@@ -131,7 +131,9 @@ public class OrderShippingProcessorIT {
 
         // Then
         Awaitility.waitAtMost(Duration.ofSeconds(10))
-                  .untilAsserted(() -> assertThat(shippingRecordsReceived.size()).isEqualTo(1));
+                  .untilAsserted(() -> {
+                      assertThat(shippingRecordsReceived.size()).isEqualTo(1);
+                  });
         assertThat(shippingRecordsReceived.get(0).value()).isInstanceOf(ExternalOrderShipped.class);
         assertThat((CharSequence) ((ExternalOrderShipped) shippingRecordsReceived.get(0).value()).orderId).isEqualTo(orderId);
         assertThat(((ExternalOrderShipped) shippingRecordsReceived.get(0).value()).eventOrder).isEqualTo(1L);

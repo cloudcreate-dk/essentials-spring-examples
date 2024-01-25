@@ -39,7 +39,8 @@
     <logger name="dk.cloudcreate.essentials.components.foundation.transaction" level="INFO"/>
     <logger name="dk.cloudcreate.essentials.components.distributed.fencedlock.postgresql.PostgresqlFencedLockManager" level="INFO"/>
     <logger name="dk.cloudcreate.essentials.shared.interceptor.DefaultInterceptorChain" level="DEBUG"/>
-    <logger name="dk.cloudcreate.essentials.components.foundation.messaging.queue.DefaultDurableQueueConsumer" level="DEBUG"/>
+    <logger name="dk.cloudcreate.essentials.components.foundation.messaging.queue.DurableQueueConsumer" level="INFO"/>
+    <logger name="dk.cloudcreate.essentials.components.foundation.messaging.queue.DurableQueueConsumer.MessageHandlingFailures" level="DEBUG"/>
     <logger name="dk.cloudcreate.essentials.components.foundation.messaging.queue.QueuePollingOptimizer.SimpleQueuePollingOptimizer" level="DEBUG"/>
     <logger name="dk.cloudcreate.essentials.components.eventsourced.eventstore.postgresql.subscription" level="INFO"/>
     <logger name="dk.cloudcreate.essentials.components.eventsourced.eventstore.postgresql.gap" level="INFO"/>

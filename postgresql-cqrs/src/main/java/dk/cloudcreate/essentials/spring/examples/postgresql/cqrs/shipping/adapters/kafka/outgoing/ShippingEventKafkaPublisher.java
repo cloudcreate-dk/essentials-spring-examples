@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2024 the original author or authors.
+ * Copyright 2021-2023 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,9 +17,12 @@
 package dk.cloudcreate.essentials.spring.examples.postgresql.cqrs.shipping.adapters.kafka.outgoing;
 
 import dk.cloudcreate.essentials.components.eventsourced.eventstore.postgresql.eventstream.AggregateType;
-import dk.cloudcreate.essentials.components.eventsourced.eventstore.postgresql.processor.*;
+import dk.cloudcreate.essentials.components.eventsourced.eventstore.postgresql.processor.EventProcessor;
+import dk.cloudcreate.essentials.components.eventsourced.eventstore.postgresql.subscription.EventStoreSubscriptionManager;
 import dk.cloudcreate.essentials.components.foundation.messaging.MessageHandler;
+import dk.cloudcreate.essentials.components.foundation.messaging.eip.store_and_forward.Inboxes;
 import dk.cloudcreate.essentials.components.foundation.messaging.queue.OrderedMessage;
+import dk.cloudcreate.essentials.components.foundation.reactive.command.DurableLocalCommandBus;
 import dk.cloudcreate.essentials.spring.examples.postgresql.cqrs.shipping.domain.ShippingOrders;
 import dk.cloudcreate.essentials.spring.examples.postgresql.cqrs.shipping.domain.events.OrderShipped;
 import lombok.NonNull;
@@ -37,10 +40,13 @@ public class ShippingEventKafkaPublisher extends EventProcessor {
     private final       KafkaTemplate<String, Object> kafkaTemplate;
 
 
-    public ShippingEventKafkaPublisher(@NonNull EventProcessorDependencies eventProcessorDependencies,
-                                       @NonNull KafkaTemplate<String, Object> kafkaTemplate
-                                       ) {
-        super(eventProcessorDependencies);
+    public ShippingEventKafkaPublisher(@NonNull Inboxes inboxes,
+                                       @NonNull DurableLocalCommandBus commandBus,
+                                       @NonNull EventStoreSubscriptionManager eventStoreSubscriptionManager,
+                                       @NonNull KafkaTemplate<String, Object> kafkaTemplate) {
+        super(eventStoreSubscriptionManager,
+              inboxes,
+              commandBus);
         this.kafkaTemplate = kafkaTemplate;
     }
 

@@ -16,6 +16,7 @@
 
 package dk.cloudcreate.essentials.spring.examples.postgresql.cqrs.banking;
 
+import dk.cloudcreate.essentials.components.foundation.messaging.queue.DurableQueues;
 import dk.cloudcreate.essentials.components.foundation.transaction.*;
 import dk.cloudcreate.essentials.reactive.command.CommandBus;
 import dk.cloudcreate.essentials.spring.examples.postgresql.cqrs.TestApplication;
@@ -73,6 +74,12 @@ public class TransferMoneyProcessorIT {
 
     @Autowired
     private UnitOfWorkFactory<? extends UnitOfWork> unitOfWorkFactory;
+
+    @Autowired
+    private DurableQueues durableQueues;
+
+    @Autowired
+    private TransferMoneyProcessor transferMoneyProcessor;
 
     @Test
     void test_request_intrabank_money_transfer() {

@@ -78,7 +78,7 @@
         <micrometer-tracing.version>1.2.2</micrometer-tracing.version>
         <netty-bom.version>4.1.106.Final</netty-bom.version>
         <junit-bom.version>5.10.1</junit-bom.version>
-        <testcontainers-bom.version>1.19.3</testcontainers-bom.version>
+        <testcontainers-bom.version>1.19.4</testcontainers-bom.version>
         <jdbi3-bom.version>3.43.0</jdbi3-bom.version>
         <jackson-bom.version>2.16.1</jackson-bom.version>
         <reactor-bom.version>2023.0.2</reactor-bom.version>

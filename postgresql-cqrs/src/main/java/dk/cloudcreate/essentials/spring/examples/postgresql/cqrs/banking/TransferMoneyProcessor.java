@@ -17,11 +17,8 @@
 package dk.cloudcreate.essentials.spring.examples.postgresql.cqrs.banking;
 
 import dk.cloudcreate.essentials.components.eventsourced.eventstore.postgresql.eventstream.AggregateType;
-import dk.cloudcreate.essentials.components.eventsourced.eventstore.postgresql.processor.EventProcessor;
-import dk.cloudcreate.essentials.components.eventsourced.eventstore.postgresql.subscription.EventStoreSubscriptionManager;
+import dk.cloudcreate.essentials.components.eventsourced.eventstore.postgresql.processor.*;
 import dk.cloudcreate.essentials.components.foundation.messaging.MessageHandler;
-import dk.cloudcreate.essentials.components.foundation.messaging.eip.store_and_forward.Inboxes;
-import dk.cloudcreate.essentials.components.foundation.reactive.command.DurableLocalCommandBus;
 import dk.cloudcreate.essentials.reactive.command.CmdHandler;
 import dk.cloudcreate.essentials.spring.examples.postgresql.cqrs.banking.commands.RequestIntraBankMoneyTransfer;
 import dk.cloudcreate.essentials.spring.examples.postgresql.cqrs.banking.domain.account.*;
@@ -45,12 +42,8 @@ public class TransferMoneyProcessor extends EventProcessor {
 
     public TransferMoneyProcessor(@NonNull Accounts accounts,
                                   @NonNull IntraBankMoneyTransfers intraBankMoneyTransfers,
-                                  @NonNull EventStoreSubscriptionManager eventStoreSubscriptionManager,
-                                  @NonNull Inboxes inboxes,
-                                  @NonNull DurableLocalCommandBus commandBus) {
-        super(eventStoreSubscriptionManager,
-              inboxes,
-              commandBus);
+                                  @NonNull EventProcessorDependencies eventProcessorDependencies) {
+        super(eventProcessorDependencies);
         this.accounts = accounts;
         this.intraBankMoneyTransfers = intraBankMoneyTransfers;
     }

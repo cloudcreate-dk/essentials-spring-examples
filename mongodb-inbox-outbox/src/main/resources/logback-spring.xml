@@ -21,8 +21,9 @@
 
     <logger name="dk.cloudcreate.essentials" level="DEBUG"/>
     <logger name="dk.cloudcreate.essentials.components.foundation.transaction" level="INFO"/>
-    <logger name="dk.cloudcreate.essentials.components.distributed.fencedlock.postgresql.PostgresqlFencedLockManager" level="INFO"/>
+    <logger name="dk.cloudcreate.essentials.components.distributed.fencedlock.springdata.mongo.MongoFencedLockManager" level="INFO"/>
     <logger name="dk.cloudcreate.essentials.shared.interceptor.DefaultInterceptorChain" level="DEBUG"/>
+    <logger name="dk.cloudcreate.essentials.components.queue.springdata.mongodb.MongoDurableQueues" level="INFO"/>
     <logger name="dk.cloudcreate.essentials.components.foundation.messaging.queue.DurableQueueConsumer" level="INFO"/>
     <logger name="dk.cloudcreate.essentials.components.foundation.messaging.queue.DurableQueueConsumer.MessageHandlingFailures" level="DEBUG"/>
     <logger name="dk.cloudcreate.essentials.components.foundation.messaging.queue.QueuePollingOptimizer.SimpleQueuePollingOptimizer" level="DEBUG"/>

@@ -38,6 +38,8 @@ import org.testcontainers.utility.DockerImageName;
 
 import java.time.Duration;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 @SpringBootTest(classes = TestApplication.class)
 @Testcontainers
 @Slf4j

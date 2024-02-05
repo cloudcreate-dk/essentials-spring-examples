@@ -1,5 +1,10 @@
 # Essentials Spring Example
 
+## License
+Essentials is released under version 2.0 of the [Apache License](https://www.apache.org/licenses/LICENSE-2.0)
+
+## Versions
+
 | Essentials version                                                                           | Java compatibility | Spring Boot compatibility |
 |----------------------------------------------------------------------------------------------|--------------------|---------------------------|
 | [0.9.*](https://github.com/cloudcreate-dk/essentials-spring-examples/tree/java11)            | 11-16              | 2.7.x                     |

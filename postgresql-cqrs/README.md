@@ -76,7 +76,7 @@ then the `traceId` can be entered into the `Trace ID` text box.
 - Stop the Spring Boot Application by pressing `Ctrl C`
 - Stop Docker:
   ```bash
-    docker compose down
+    docker compose down -v
   ```
 
 ### Shipping flow explained

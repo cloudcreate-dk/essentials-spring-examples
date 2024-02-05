@@ -14,17 +14,19 @@
  * limitations under the License.
  */
 
-package dk.cloudcreate.essentials.spring.examples.postgresql.messaging;
+package dk.cloudcreate.essentials.spring.examples.mongodb.messaging;
 
+import dk.cloudcreate.essentials.components.boot.autoconfigure.mongodb.*;
+import dk.cloudcreate.essentials.spring.examples.mongodb.messaging.shipping.OrderId;
 import io.micrometer.observation.ObservationRegistry;
 import io.micrometer.observation.aop.ObservedAspect;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.data.convert.Jsr310Converters;
 
 @SpringBootApplication
 public class Application {
-
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
     }
@@ -34,4 +36,14 @@ public class Application {
         return new ObservedAspect(observationRegistry);
     }
 
+    @Bean
+    AdditionalCharSequenceTypesSupported additionalCharSequenceTypesSupported() {
+        return new AdditionalCharSequenceTypesSupported(OrderId.class);
+    }
+
+    @Bean
+    AdditionalConverters additionalGenericConverters() {
+        return new AdditionalConverters(Jsr310Converters.StringToDurationConverter.INSTANCE,
+                                        Jsr310Converters.DurationToStringConverter.INSTANCE);
+    }
 }

@@ -39,10 +39,15 @@
             <version>${essentials.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.objenesis</groupId>
-            <artifactId>objenesis</artifactId>
-            <version>${objenesis.version}</version>
+            <groupId>dk.cloudcreate.essentials</groupId>
+            <artifactId>types-springdata-jpa</artifactId>
+            <version>${essentials.version}</version>
         </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.objenesis</groupId>-->
+<!--            <artifactId>objenesis</artifactId>-->
+<!--            <version>${objenesis.version}</version>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
@@ -62,7 +67,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
             <version>${spring-boot.version}</version>
-
         </dependency>
         <dependency>
             <groupId>org.springframework.kafka</groupId>
@@ -79,11 +83,6 @@
             <groupId>org.apache.kafka</groupId>
             <artifactId>kafka-clients</artifactId>
             <version>${kafka-clients.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.yaml</groupId>
-            <artifactId>snakeyaml</artifactId>
-            <version>1.33</version>
         </dependency>
         <dependency>
             <groupId>org.jdbi</groupId>

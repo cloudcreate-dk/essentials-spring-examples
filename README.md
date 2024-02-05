@@ -6,12 +6,12 @@ Essentials is released under version 2.0 of the [Apache License](https://www.apa
 ## Versions
 
 
-| Essentials version                                                                   | Java compatibility | Spring Boot compatibility |
-|--------------------------------------------------------------------------------------|--------------------|---------------------------|
-| [0.9.*](https://github.com/cloudcreate-dk/essentials-project/tree/java11)            | 11-16              | 2.7.x                     |
-| [0.20.*](https://github.com/cloudcreate-dk/essentials-project/tree/springboot_3_0_x) | 17+                | 3.0.x                     |
-| [0.30.*](https://github.com/cloudcreate-dk/essentials-project/tree/springboot_3_1_x) | 17+                | 3.1.x                     |
-| [0.40.*](https://github.com/cloudcreate-dk/essentials-project/tree/main)             | 17+                | 3.2.x                     |
+| Essentials version                                                                           | Java compatibility | Spring Boot compatibility |
+|----------------------------------------------------------------------------------------------|--------------------|---------------------------|
+| [0.9.*](https://github.com/cloudcreate-dk/essentials-spring-examples/tree/java11)            | 11-16              | 2.7.x                     |
+| [0.20.*](https://github.com/cloudcreate-dk/essentials-spring-examples/tree/springboot_3_0_x) | 17+                | 3.0.x                     |
+| [0.30.*](https://github.com/cloudcreate-dk/essentials-spring-examples/tree/springboot_3_1_x) | 17+                | 3.1.x                     |
+| [0.40.*](https://github.com/cloudcreate-dk/essentials-spring-examples/tree/main)             | 17+                | 3.2.x                     |
 
 Examples of how to use the Essentials and Essentials Components together with Spring and Spring Boot:
 

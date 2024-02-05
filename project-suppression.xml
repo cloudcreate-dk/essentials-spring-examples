@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ Copyright 2021-2023 the original author or authors.
+  ~ Copyright 2021-2024 the original author or authors.
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -300,5 +300,71 @@
    ]]></notes>
         <packageUrl regex="true">^pkg:maven/io\.netty/netty-handler@.*$</packageUrl>
         <cve>CVE-2023-4586</cve>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: micrometer-tracing-bridge-brave-1.2.1.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/io\.micrometer/micrometer\-tracing\-bridge\-brave@.*$</packageUrl>
+        <cpe>cpe:/a:brave:brave</cpe>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+        TestContainers mongodb dependency isn't the same as mongodb:mongodb
+   file name: mongodb-1.19.3.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.testcontainers/mongodb@.*$</packageUrl>
+        <cpe>cpe:/a:mongodb:mongodb</cpe>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+        springdata-mongo-distributed-fenced-lock-?.?.?.jar dependency isn't the same as mongodb:mongodb
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/dk\.cloudcreate\.essentials\.components/springdata-mongo-distributed-fenced-lock@.*$</packageUrl>
+        <cpe>cpe:/a:mongodb:mongodb</cpe>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+        springdata-mongo-queue-?.?.?.jar dependency isn't the same as mongodb:mongodb
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/dk\.cloudcreate\.essentials\.components/springdata-mongo-queue@.*$</packageUrl>
+        <cpe>cpe:/a:mongodb:mongodb</cpe>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: micrometer-registry-prometheus-1.12.1.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/io\.micrometer/micrometer\-registry\-prometheus@.*$</packageUrl>
+        <cpe>cpe:/a:prometheus:prometheus</cpe>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: brave-propagation-aws-0.23.5.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/io\.zipkin\.aws/brave\-propagation\-aws@.*$</packageUrl>
+        <cpe>cpe:/a:web_project:web</cpe>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: junit-platform-commons-1.10.1.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.junit\.platform/junit\-platform\-commons@.*$</packageUrl>
+        <cpe>cpe:/a:fan_platform_project:fan_platform</cpe>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: spring-boot-starter-mongodb-DEV-SNAPSHOT.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/dk\.cloudcreate\.essentials\.components/spring\-boot\-starter\-mongodb@.*$</packageUrl>
+        <cpe>cpe:/a:mongodb:mongodb</cpe>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: json-path-2.8.0.jar
+   Under review - see https://github.com/json-path/JsonPath/issues/973 for details
+   Ignoring as json-path is included under test scope which means it won't be parsing user provided input
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/com\.jayway\.jsonpath/json\-path@.*$</packageUrl>
+        <vulnerabilityName>CVE-2023-51074</vulnerabilityName>
     </suppress>
 </suppressions>

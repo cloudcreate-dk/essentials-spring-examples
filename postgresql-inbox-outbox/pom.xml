@@ -39,9 +39,9 @@
             <version>${essentials.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.objenesis</groupId>
-            <artifactId>objenesis</artifactId>
-            <version>${objenesis.version}</version>
+            <groupId>dk.cloudcreate.essentials</groupId>
+            <artifactId>types-springdata-jpa</artifactId>
+            <version>${essentials.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>

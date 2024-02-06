@@ -26,8 +26,8 @@ import java.util.*;
 
 @Component
 public class ExampleDurableQueuesInterceptor implements DurableQueuesInterceptor {
-    private static final Logger log = LoggerFactory.getLogger(ExampleDurableQueuesInterceptor.class);
-    private DurableQueues durableQueues;
+    private static final Logger        log = LoggerFactory.getLogger(ExampleDurableQueuesInterceptor.class);
+    private              DurableQueues durableQueues;
 
     @Override
     public void setDurableQueues(DurableQueues durableQueues) {
@@ -36,22 +36,22 @@ public class ExampleDurableQueuesInterceptor implements DurableQueuesInterceptor
 
     @Override
     public QueueEntryId intercept(QueueMessage operation, InterceptorChain<QueueMessage, QueueEntryId, DurableQueuesInterceptor> interceptorChain) {
-        log.info("Intercepting: {}", operation);
+        log.trace("Intercepting: {}", operation);
         return interceptorChain.proceed();
     }
 
     @Override
     public List<QueueEntryId> intercept(QueueMessages operation, InterceptorChain<QueueMessages, List<QueueEntryId>, DurableQueuesInterceptor> interceptorChain) {
-        log.info("Intercepting: {}", operation);
+        log.trace("Intercepting: {}", operation);
         return interceptorChain.proceed();
     }
 
     @Override
     public Optional<QueuedMessage> intercept(GetNextMessageReadyForDelivery operation, InterceptorChain<GetNextMessageReadyForDelivery, Optional<QueuedMessage>, DurableQueuesInterceptor> interceptorChain) {
-        log.info("Intercepting: {}", operation);
+        log.trace("Intercepting: {}", operation);
         var nextMessageReadyForDelivery = interceptorChain.proceed();
         nextMessageReadyForDelivery.ifPresent(queuedMessage -> {
-            log.info("Intercepting GetNextMessageReadyForDelivery: {}", queuedMessage);
+            log.trace("Intercepting GetNextMessageReadyForDelivery: {}", queuedMessage);
         });
         return nextMessageReadyForDelivery;
     }

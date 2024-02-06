@@ -20,7 +20,7 @@ import dk.cloudcreate.essentials.spring.examples.postgresql.messaging.shipping.O
 import lombok.NonNull;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.Optional;
+import java.util.*;
 
 public interface ShippingOrders extends JpaRepository<ShippingOrder, OrderId> {
     default Optional<ShippingOrder> findOrder(@NonNull OrderId orderId) {
@@ -34,4 +34,7 @@ public interface ShippingOrders extends JpaRepository<ShippingOrder, OrderId> {
     default void registerNewOrder(@NonNull ShippingOrder order) {
         save(order);
     }
+
+    List<ShippingOrder> findByShipped(boolean shippedStatus);
+    List<ShippingOrder> findByIdIn(List<OrderId> ids);
 }

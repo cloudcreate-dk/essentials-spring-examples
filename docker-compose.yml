@@ -16,6 +16,16 @@ services:
       POSTGRES_PASSWORD: password
       POSTGRES_DB: essentials
 
+  mongodb:
+    container_name: mongodb
+    image: mongo:latest
+    volumes:
+      - ./docker/mongo:/docker-entrypoint-initdb.d/
+    restart: always
+    ports:
+      - "27017:27017"
+    command: [--replSet, "rs0"]
+
   # From https://developer.confluent.io/quickstart/kafka-docker/
   zookeeper:
     image: confluentinc/cp-zookeeper:latest

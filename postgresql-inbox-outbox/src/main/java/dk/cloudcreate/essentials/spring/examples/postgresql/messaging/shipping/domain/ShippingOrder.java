@@ -29,8 +29,9 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Builder
 public class ShippingOrder {
-    @Id
+    @EmbeddedId
     @EqualsAndHashCode.Include
+    @Column(name="order_id")
     private OrderId                    id;
     private boolean                    shipped;
     @Embedded

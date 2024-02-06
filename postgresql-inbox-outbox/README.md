@@ -52,7 +52,7 @@ This will trigger the Shipping process.
 - Stop the Spring Boot Application by pressing `Ctrl C`
 - Stop Docker: 
   ```bash
-    docker compose down
+    docker compose down -v
   ```
 
 ## Shipping flow explained

@@ -60,41 +60,43 @@
         <revision>DEV-SNAPSHOT</revision>
         <skipDependencyCheck>false</skipDependencyCheck>
 
-        <essentials.version>0.20.12</essentials.version>
+        <!--Essentials versions-->
+        <essentials.version>0.20.13</essentials.version>
         <objenesis.version>3.3</objenesis.version>
-        <postgresql.version>42.7.1</postgresql.version>
-        <slf4j.version>2.0.11</slf4j.version>
+        <postgresql.version>42.7.3</postgresql.version>
+        <slf4j.version>2.0.12</slf4j.version>
         <spring-boot.version>3.0.13</spring-boot.version>
-        <awaitility.version>4.2.0</awaitility.version>
+        <awaitility.version>4.2.1</awaitility.version>
         <spring-data-mongodb.version>4.0.12</spring-data-mongodb.version>
         <spring-data-jpa.version>3.0.12</spring-data-jpa.version>
         <objenesis.version>3.3</objenesis.version>
         <assertj.version>3.25.3</assertj.version>
         <mongodb-driver-sync.version>4.11.1</mongodb-driver-sync.version>
-        <log4j-to-slf4j.version>2.22.1</log4j-to-slf4j.version>
-        <json-smart.version>2.5.0</json-smart.version>
+        <log4j-to-slf4j.version>2.23.1</log4j-to-slf4j.version>
+        <json-smart.version>2.5.1</json-smart.version>
+        <json-path.version>2.9.0</json-path.version>
         <snakeyaml.version>2.2</snakeyaml.version>
-        <micrometer.version>1.12.2</micrometer.version>
-        <micrometer-tracing.version>1.2.2</micrometer-tracing.version>
-        <netty-bom.version>4.1.106.Final</netty-bom.version>
+        <micrometer.version>1.12.4</micrometer.version>
+        <micrometer-tracing.version>1.2.4</micrometer-tracing.version>
+        <netty-bom.version>4.1.107.Final</netty-bom.version>
         <junit-bom.version>5.10.2</junit-bom.version>
-        <testcontainers-bom.version>1.19.4</testcontainers-bom.version>
-        <jdbi3-bom.version>3.44.0</jdbi3-bom.version>
-        <jackson-bom.version>2.16.1</jackson-bom.version>
-        <reactor-bom.version>2022.0.15</reactor-bom.version>
-        <spring-framework-bom.version>6.0.16</spring-framework-bom.version>
-        <mockito-bom.version>5.10.0</mockito-bom.version>
-        <logback.version>1.4.14</logback.version>
+        <testcontainers-bom.version>1.19.7</testcontainers-bom.version>
+        <jdbi3-bom.version>3.45.1</jdbi3-bom.version>
+        <jackson-bom.version>2.17.0</jackson-bom.version>
+        <reactor-bom.version>2023.0.4</reactor-bom.version>
+        <spring-framework-bom.version>6.0.18</spring-framework-bom.version>
+        <mockito-bom.version>5.11.0</mockito-bom.version>
+        <logback.version>1.5.3</logback.version>
+        <avro.version>1.11.3</avro.version>
+        <commons-compress.version>1.26.1</commons-compress.version>
 
         <!-- Examples specific versions -->
-        <spring-kafka.version>3.0.13</spring-kafka.version>
-        <kafka-clients.version>3.6.1</kafka-clients.version>
-        <log4j-to-slf4j.version>2.22.1</log4j-to-slf4j.version>
-        <json-smart.version>2.5.0</json-smart.version>
-        <lombok.version>1.18.30</lombok.version>
+        <spring-kafka.version>3.0.15</spring-kafka.version>
+        <kafka-clients.version>3.7.0</kafka-clients.version>
+        <lombok.version>1.18.32</lombok.version>
         <prometheus-simpleclient.version>0.16.0</prometheus-simpleclient.version>
         <zipkin-reporter-brave.version>2.17.2</zipkin-reporter-brave.version>
-        <loki-logback-appender.version>1.4.2</loki-logback-appender.version>
+        <loki-logback-appender.version>1.5.1</loki-logback-appender.version>
 
         <!-- Maven plugin versions -->
         <maven-dependency-plugin.version>3.6.1</maven-dependency-plugin.version>
@@ -109,14 +111,14 @@
         <maven-javadoc-plugin.version>3.6.3</maven-javadoc-plugin.version>
         <maven-failsafe-plugin.version>3.2.5</maven-failsafe-plugin.version>
         <maven-surefire-plugin.version>3.2.5</maven-surefire-plugin.version>
-        <maven-compiler-plugin.version>3.12.1</maven-compiler-plugin.version>
+        <maven-compiler-plugin.version>3.13.0</maven-compiler-plugin.version>
         <versions-maven-plugin.version>2.16.2</versions-maven-plugin.version>
         <maven-enforcer-plugin.version>3.4.1</maven-enforcer-plugin.version>
         <minimum-maven-version>3.8.8</minimum-maven-version>
-        <dependency-check-maven.version>9.0.9</dependency-check-maven.version>
+        <dependency-check-maven.version>9.0.10</dependency-check-maven.version>
         <flatten-maven-plugin.version>1.6.0</flatten-maven-plugin.version>
         <nexus-staging-maven-plugin.version>1.6.13</nexus-staging-maven-plugin.version>
-        <maven-gpg-plugin.version>3.1.0</maven-gpg-plugin.version>
+        <maven-gpg-plugin.version>3.2.1</maven-gpg-plugin.version>
     </properties>
 
     <modules>
@@ -196,6 +198,12 @@
             <groupId>org.yaml</groupId>
             <artifactId>snakeyaml</artifactId>
             <version>${snakeyaml.version}</version>
+        </dependency>
+        <!-- Due to CVE-2023-42503, CVE-2024-26308, CVE-2024-25710 -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-compress</artifactId>
+            <version>${commons-compress.version}</version>
         </dependency>
 
         <!-- Tracing, Latency and Metric setup is inspired by https://spring.io/blog/2022/10/12/observability-with-spring-boot-3 / https://github.com/marcingrzejszczak/observability-boot-blog-post -->

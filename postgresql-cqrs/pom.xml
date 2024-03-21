@@ -38,6 +38,11 @@
             <artifactId>spring-boot-starter-postgresql-event-store</artifactId>
             <version>${essentials.version}</version>
         </dependency>
+        <dependency>
+            <groupId>dk.cloudcreate.essentials.components</groupId>
+            <artifactId>eventsourced-aggregates</artifactId>
+            <version>${essentials.version}</version>
+        </dependency>
 <!--        <dependency>-->
 <!--            <groupId>org.objenesis</groupId>-->
 <!--            <artifactId>objenesis</artifactId>-->

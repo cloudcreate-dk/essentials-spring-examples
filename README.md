@@ -3,6 +3,9 @@
 ## License
 Essentials is released under version 2.0 of the [Apache License](https://www.apache.org/licenses/LICENSE-2.0)
 
+> **NOTE:**  
+> **The Essentials libraries are WORK-IN-PROGRESS**
+
 # Security
 
 Several of the components, as well as their subcomponents and/or supporting classes, allows the user of the components to provide customized:

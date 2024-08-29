@@ -20,6 +20,8 @@ import dk.cloudcreate.essentials.spring.examples.postgresql.cqrs.shipping.OrderI
 import lombok.*;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class ShipOrder {
     @NonNull
     public OrderId orderId;

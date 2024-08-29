@@ -19,7 +19,9 @@ package dk.cloudcreate.essentials.spring.examples.mongodb.messaging.shipping.com
 import dk.cloudcreate.essentials.spring.examples.mongodb.messaging.shipping.OrderId;
 import lombok.*;
 
-@Value
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class ShipOrder {
     @NonNull
     public OrderId orderId;

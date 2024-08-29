@@ -19,7 +19,9 @@ package dk.cloudcreate.essentials.spring.examples.postgresql.messaging.shipping.
 import dk.cloudcreate.essentials.spring.examples.postgresql.messaging.shipping.OrderId;
 import lombok.*;
 
-@Value
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class ShipOrder {
     @NonNull
     public OrderId orderId;

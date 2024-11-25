@@ -29,11 +29,11 @@ public class ShippingAPI {
 
     @PostMapping("/register-order")
     public void registerShippingOrder(@RequestBody RegisterShippingOrder cmd) {
-        commandBus.send(cmd);
+        commandBus.sendAndDontWait(cmd);
     }
 
     @PostMapping("/ship-order")
     public void shipOrder(@RequestBody ShipOrder cmd) {
-        commandBus.send(cmd);
+        commandBus.sendAndDontWait(cmd);
     }
 }

@@ -16,8 +16,7 @@
 
 package dk.cloudcreate.essentials.spring.examples.postgresql.cqrs.shipping;
 
-import dk.cloudcreate.essentials.reactive.Handler;
-import dk.cloudcreate.essentials.reactive.command.AnnotatedCommandHandler;
+import dk.cloudcreate.essentials.reactive.command.*;
 import dk.cloudcreate.essentials.spring.examples.postgresql.cqrs.shipping.commands.*;
 import dk.cloudcreate.essentials.spring.examples.postgresql.cqrs.shipping.domain.*;
 import lombok.NonNull;
@@ -35,7 +34,7 @@ public class OrderShippingProcessor extends AnnotatedCommandHandler {
     }
 
     // Automatically runs in a transaction as it's forwarded by the DurableLocalCommandBus
-    @Handler
+    @CmdHandler
     void handle(RegisterShippingOrder cmd) {
         var existingOrder = shippingOrders.findOrder(cmd.orderId);
         if (existingOrder.isEmpty()) {
@@ -45,7 +44,7 @@ public class OrderShippingProcessor extends AnnotatedCommandHandler {
     }
 
     // Automatically runs in a transaction as it's forwarded by the DurableLocalCommandBus
-    @Handler
+    @CmdHandler
     void handle(ShipOrder cmd) {
         log.debug("===> Initiating Shipping of Order '{}'", cmd.orderId);
         var existingOrder = shippingOrders.getOrder(cmd.orderId);

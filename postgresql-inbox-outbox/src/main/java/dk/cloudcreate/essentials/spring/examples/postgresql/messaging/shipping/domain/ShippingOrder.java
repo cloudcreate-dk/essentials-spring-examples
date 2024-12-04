@@ -16,7 +16,6 @@
 
 package dk.cloudcreate.essentials.spring.examples.postgresql.messaging.shipping.domain;
 
-import dk.cloudcreate.essentials.spring.examples.postgresql.messaging.shipping.OrderId;
 import dk.cloudcreate.essentials.spring.examples.postgresql.messaging.shipping.commands.RegisterShippingOrder;
 import jakarta.persistence.*;
 import lombok.*;
@@ -28,16 +27,16 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class ShippingOrder {
-    @EmbeddedId
+    @Id
     @EqualsAndHashCode.Include
-    @Column(name="order_id")
-    private OrderId                    id;
+    @Column(name = "order_id")
+    private String                     id;
     private boolean                    shipped;
     @Embedded
     private ShippingDestinationAddress destinationAddress;
 
     public ShippingOrder(RegisterShippingOrder cmd) {
-        this.id = cmd.orderId;
+        this.id = cmd.orderId.toString();
         destinationAddress = cmd.destinationAddress;
     }
 

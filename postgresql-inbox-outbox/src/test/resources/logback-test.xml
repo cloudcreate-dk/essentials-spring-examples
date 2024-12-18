@@ -24,15 +24,28 @@
         </encoder>
     </appender>
 
-    <logger name="dk.cloudcreate.essentials" level="DEBUG"/>
+    <logger name="dk.cloudcreate.essentials" level="INFO"/>
+    <logger name="dk.cloudcreate.essentials.spring.examples.postgresql.messaging.shipping.LoadOrderShippingProcessorIT" level="DEBUG"/>
     <logger name="dk.cloudcreate.essentials.components.foundation.transaction" level="INFO"/>
     <logger name="dk.cloudcreate.essentials.components.eventsourced.eventstore.postgresql.spring" level="INFO"/>
     <logger name="dk.cloudcreate.essentials.components.distributed.fencedlock" level="INFO"/>
     <logger name="dk.cloudcreate.essentials.components.eventsourced.eventstore.postgresql.EventStore.PollingEventStream" level="INFO"/>
+    <logger name="dk.cloudcreate.essentials.components.foundation.messaging.eip.store_and_forward.Inboxes.DurableQueueBasedInboxes" level="DEBUG"/>
+
+    <!-- Hikari logs -->
+    <logger name="com.zaxxer.hikari.HikariConfig" level="INFO"/>
+    <logger name="com.zaxxer.hikari.HikariPool" level="INFO"/>
 
     <!-- Set to TRACE to see detailed queue logs -->
-    <logger name="dk.cloudcreate.essentials.components.queue" level="INFO"/>
     <logger name="dk.cloudcreate.essentials.components.foundation.messaging.queue" level="INFO"/>
+    <logger name="dk.cloudcreate.essentials.components.queue.postgresql.PostgresqlDurableQueues" level="INFO"/>
+    <logger name="dk.cloudcreate.essentials.components.queue.postgresql.PostgresqlDurableQueues$1" level="INFO"/>
+    <logger name="dk.cloudcreate.essentials.components.foundation.postgresql.MultiTableChangeListener" level="INFO"/>
+
+    <logger name="dk.cloudcreate.essentials.components.foundation.reactive.command.DurableLocalCommandBus" level="INFO"/>
+    <logger name="dk.cloudcreate.essentials.components.foundation.transaction.UnitOfWorkFactory" level="INFO"/>
+    <logger name="dk.cloudcreate.essentials.components.foundation.transaction.spring.SpringTransactionAwareUnitOfWorkFactory" level="INFO"/>
+    <logger name="dk.cloudcreate.essentials.components.foundation.transaction.spring.SpringTransactionAwareUnitOfWork" level="INFO"/>
 
 
     <root level="INFO">

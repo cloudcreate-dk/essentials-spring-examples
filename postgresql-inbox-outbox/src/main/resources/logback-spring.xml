@@ -37,12 +37,15 @@
 
     <logger name="dk.cloudcreate.essentials" level="DEBUG"/>
     <logger name="dk.cloudcreate.essentials.components.foundation.transaction" level="INFO"/>
+    <logger name="dk.cloudcreate.essentials.components.foundation.reactive.command.DurableLocalCommandBus" level="INFO"/>
     <logger name="dk.cloudcreate.essentials.components.distributed.fencedlock.postgresql.PostgresqlFencedLockManager" level="INFO"/>
-    <logger name="dk.cloudcreate.essentials.shared.interceptor.DefaultInterceptorChain" level="DEBUG"/>
+    <logger name="dk.cloudcreate.essentials.shared.interceptor.DefaultInterceptorChain" level="INFO"/>
+    <logger name="dk.cloudcreate.essentials.components.foundation.messaging.eip.store_and_forward.Inboxes.DurableQueueBasedInboxes" level="INFO"/>
     <logger name="dk.cloudcreate.essentials.components.queue.postgresql.PostgresqlDurableQueues" level="INFO"/>
+    <logger name="dk.cloudcreate.essentials.components.queue.postgresql.PostgresqlDurableQueues$1" level="INFO"/>
     <logger name="dk.cloudcreate.essentials.components.foundation.messaging.queue.DurableQueueConsumer" level="INFO"/>
-    <logger name="dk.cloudcreate.essentials.components.foundation.messaging.queue.DurableQueueConsumer.MessageHandlingFailures" level="DEBUG"/>
-    <logger name="dk.cloudcreate.essentials.components.foundation.messaging.queue.QueuePollingOptimizer.SimpleQueuePollingOptimizer" level="DEBUG"/>
+    <logger name="dk.cloudcreate.essentials.components.foundation.messaging.queue.DurableQueueConsumer.MessageHandlingFailures" level="INFO"/>
+    <logger name="dk.cloudcreate.essentials.components.foundation.messaging.queue.QueuePollingOptimizer.SimpleQueuePollingOptimizer" level="INFO"/>
     <root level="INFO">
         <appender-ref ref="LOKI"/>
     </root>

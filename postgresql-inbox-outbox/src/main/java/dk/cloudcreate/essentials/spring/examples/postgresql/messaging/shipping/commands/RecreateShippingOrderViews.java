@@ -14,12 +14,10 @@
  * limitations under the License.
  */
 
-package dk.cloudcreate.essentials.spring.examples.postgresql.messaging;
-
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-
-@SpringBootApplication
-public class TestApplication {
+package dk.cloudcreate.essentials.spring.examples.postgresql.messaging.shipping.commands;
 
 
+import java.time.OffsetDateTime;
+
+public record RecreateShippingOrderViews(OffsetDateTime timestamp) {
 }

@@ -14,12 +14,9 @@
  * limitations under the License.
  */
 
-package dk.cloudcreate.essentials.spring.examples.postgresql.messaging;
+package dk.cloudcreate.essentials.spring.examples.postgresql.cqrs.task.domain;
 
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+import java.time.LocalDateTime;
 
-@SpringBootApplication
-public class TestApplication {
-
-
+public record Comment(TaskId taskId, String content, LocalDateTime createdAt) {
 }

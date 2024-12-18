@@ -14,12 +14,22 @@
  * limitations under the License.
  */
 
-package dk.cloudcreate.essentials.spring.examples.postgresql.messaging;
+package dk.cloudcreate.essentials.spring.examples.postgresql.cqrs.task.domain;
 
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+import dk.cloudcreate.essentials.components.foundation.types.RandomIdGenerator;
+import dk.cloudcreate.essentials.types.CharSequenceType;
 
-@SpringBootApplication
-public class TestApplication {
+public class TaskId extends CharSequenceType<TaskId> {
 
+    public TaskId(CharSequence value) {
+        super(value);
+    }
 
+    public static TaskId random() {
+        return new TaskId(RandomIdGenerator.generate());
+    }
+
+    public static TaskId of(CharSequence id) {
+        return new TaskId(id);
+    }
 }

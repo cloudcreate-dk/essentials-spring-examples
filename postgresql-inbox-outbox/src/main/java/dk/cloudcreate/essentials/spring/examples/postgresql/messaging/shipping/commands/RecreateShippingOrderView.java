@@ -14,12 +14,9 @@
  * limitations under the License.
  */
 
-package dk.cloudcreate.essentials.spring.examples.postgresql.messaging;
+package dk.cloudcreate.essentials.spring.examples.postgresql.messaging.shipping.commands;
 
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+import dk.cloudcreate.essentials.spring.examples.postgresql.messaging.shipping.OrderId;
 
-@SpringBootApplication
-public class TestApplication {
-
-
+public record RecreateShippingOrderView(OrderId id) {
 }

@@ -34,6 +34,11 @@
     <logger name="dk.cloudcreate.essentials.components.queue" level="INFO"/>
     <logger name="dk.cloudcreate.essentials.components.foundation.messaging.queue" level="INFO"/>
 
+    <!-- Transaction logging -->
+    <logger name="dk.cloudcreate.essentials.components.foundation.transaction.UnitOfWorkFactory" level="INFO"/>
+    <logger name="dk.cloudcreate.essentials.components.foundation.transaction.spring.SpringTransactionAwareUnitOfWorkFactory" level="INFO"/>
+    <logger name="dk.cloudcreate.essentials.components.foundation.transaction.spring.SpringTransactionAwareUnitOfWork" level="INFO"/>
+    <logger name="org.springframework.jdbc.support.JdbcTransactionManager" level="INFO"/>
 
     <root level="INFO">
         <appender-ref ref="STDOUT"/>

@@ -14,12 +14,9 @@
  * limitations under the License.
  */
 
-package dk.cloudcreate.essentials.spring.examples.postgresql.messaging;
+package dk.cloudcreate.essentials.spring.examples.postgresql.cqrs.task.commands;
 
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+import dk.cloudcreate.essentials.spring.examples.postgresql.cqrs.task.domain.TaskId;
 
-@SpringBootApplication
-public class TestApplication {
-
-
+public record CreateTask(TaskId taskId, String comment) implements TaskCommand {
 }

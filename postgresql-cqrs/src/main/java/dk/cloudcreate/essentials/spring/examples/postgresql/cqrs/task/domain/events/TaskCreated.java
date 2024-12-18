@@ -14,12 +14,19 @@
  * limitations under the License.
  */
 
-package dk.cloudcreate.essentials.spring.examples.postgresql.messaging;
+package dk.cloudcreate.essentials.spring.examples.postgresql.cqrs.task.domain.events;
 
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+import dk.cloudcreate.essentials.spring.examples.postgresql.cqrs.task.domain.TaskId;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
-@SpringBootApplication
-public class TestApplication {
+import java.time.LocalDateTime;
 
+@Getter
+@AllArgsConstructor
+public class TaskCreated implements TaskEvent {
 
+    private TaskId taskId;
+    private String comment;
+    private LocalDateTime createdAt;
 }

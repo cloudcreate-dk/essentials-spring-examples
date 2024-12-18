@@ -61,7 +61,7 @@
         <skipDependencyCheck>false</skipDependencyCheck>
 
         <!--Essentials versions-->
-        <essentials.version>0.40.18</essentials.version>
+        <essentials.version>0.40.19</essentials.version>
 
         <spring-boot.version>3.2.12</spring-boot.version>
         <spring-framework-bom.version>6.1.15</spring-framework-bom.version>

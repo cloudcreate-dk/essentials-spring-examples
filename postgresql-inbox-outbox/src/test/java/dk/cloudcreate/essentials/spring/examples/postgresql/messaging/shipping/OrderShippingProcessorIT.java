@@ -16,79 +16,25 @@
 
 package dk.cloudcreate.essentials.spring.examples.postgresql.messaging.shipping;
 
-import dk.cloudcreate.essentials.components.foundation.messaging.queue.DurableQueues;
-import dk.cloudcreate.essentials.components.foundation.reactive.command.DurableLocalCommandBus;
-import dk.cloudcreate.essentials.spring.examples.postgresql.messaging.TestApplication;
+import dk.cloudcreate.essentials.spring.examples.postgresql.messaging.AbstractIntegrationTest;
 import dk.cloudcreate.essentials.spring.examples.postgresql.messaging.shipping.adapters.kafka.incoming.*;
 import dk.cloudcreate.essentials.spring.examples.postgresql.messaging.shipping.adapters.kafka.outgoing.*;
 import dk.cloudcreate.essentials.spring.examples.postgresql.messaging.shipping.commands.RegisterShippingOrder;
 import dk.cloudcreate.essentials.spring.examples.postgresql.messaging.shipping.domain.ShippingDestinationAddress;
-import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.junit.jupiter.api.*;
 import org.slf4j.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.kafka.core.*;
 import org.springframework.kafka.listener.*;
-import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.context.*;
-import org.testcontainers.containers.*;
-import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.junit.jupiter.*;
 import org.testcontainers.shaded.org.awaitility.Awaitility;
-import org.testcontainers.utility.DockerImageName;
 
 import java.time.Duration;
-import java.util.*;
+import java.util.ArrayList;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@SpringBootTest(classes = TestApplication.class)
-@Testcontainers
-@DirtiesContext
-public class OrderShippingProcessorIT {
+public class OrderShippingProcessorIT extends AbstractIntegrationTest {
+
     private static final Logger log = LoggerFactory.getLogger(OrderShippingProcessorIT.class);
-
-    @Container
-    static PostgreSQLContainer<?> postgreSQLContainer = new PostgreSQLContainer<>("postgres:latest")
-            .withDatabaseName("test")
-            .withPassword("test")
-            .withUsername("test");
-
-    @Container
-    static  KafkaContainer                                kafkaContainer = new KafkaContainer(DockerImageName.parse("confluentinc/cp-kafka:latest"));
-    private KafkaMessageListenerContainer<String, Object> kafkaListenerContainer;
-
-    @DynamicPropertySource
-    static void setProperties(DynamicPropertyRegistry registry) {
-        registry.add("spring.datasource.url", postgreSQLContainer::getJdbcUrl);
-        registry.add("spring.datasource.password", postgreSQLContainer::getPassword);
-        registry.add("spring.datasource.username", postgreSQLContainer::getUsername);
-
-        registry.add("spring.kafka.bootstrap-servers", kafkaContainer::getBootstrapServers);
-    }
-
-    @Autowired
-    private KafkaTemplate<String, Object> kafkaTemplate;
-
-
-    @Autowired
-    private OrderShippingProcessor orderShippingProcessor;
-
-    @Autowired
-    private ShippingEventKafkaPublisher shippingEventKafkaPublisher;
-
-    @Autowired
-    private DurableLocalCommandBus commandBus;
-
-    @Autowired
-    private DurableQueues durableQueues;
-
-    @Autowired
-    ConsumerFactory<String, Object> kafkaConsumerFactory;
-
-    private List<ConsumerRecord<String, Object>> shippingRecordsReceived;
 
     @BeforeEach
     void setup() {

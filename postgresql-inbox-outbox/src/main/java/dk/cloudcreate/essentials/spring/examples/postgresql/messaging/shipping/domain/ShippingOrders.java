@@ -19,12 +19,13 @@ package dk.cloudcreate.essentials.spring.examples.postgresql.messaging.shipping.
 import dk.cloudcreate.essentials.spring.examples.postgresql.messaging.shipping.OrderId;
 import lombok.NonNull;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import java.util.*;
 
-public interface ShippingOrders extends JpaRepository<ShippingOrder, OrderId> {
+public interface ShippingOrders extends JpaRepository<ShippingOrder, String> {
     default Optional<ShippingOrder> findOrder(@NonNull OrderId orderId) {
-        return findById(orderId);
+        return findById(orderId.toString());
     }
 
     default ShippingOrder getOrder(@NonNull OrderId orderId) {
@@ -36,5 +37,8 @@ public interface ShippingOrders extends JpaRepository<ShippingOrder, OrderId> {
     }
 
     List<ShippingOrder> findByShipped(boolean shippedStatus);
-    List<ShippingOrder> findByIdIn(List<OrderId> ids);
+    List<ShippingOrder> findByIdIn(List<String> ids);
+
+    @Query("SELECT id FROM ShippingOrder")
+    List<String> findAllOrderIds();
 }

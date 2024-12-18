@@ -53,7 +53,8 @@ public class DurableQueuesLoadIT {
             .withPassword("test")
             .withUsername("test");
     @Container
-    static  KafkaContainer         kafkaContainer      = new KafkaContainer(DockerImageName.parse("confluentinc/cp-kafka:latest"));
+    static  org.testcontainers.kafka.KafkaContainer       kafkaContainer = new org.testcontainers.kafka.KafkaContainer("apache/kafka-native:latest")
+            .withEnv("KAFKA_LISTENERS", "PLAINTEXT://:9092,BROKER://:9093,CONTROLLER://:9094");
 
 
     @DynamicPropertySource
@@ -116,7 +117,7 @@ public class DurableQueuesLoadIT {
         assertThat(nextMessages).hasSize(10);
 
 
-        Awaitility.waitAtMost(Duration.ofSeconds(10))
+        Awaitility.waitAtMost(Duration.ofSeconds(20))
                   .untilAsserted(() -> {
                       System.out.println("-----> " + Instant.now() + " messages received: " + msgHandler.messagesReceived.get());
                       assertThat(msgHandler.messagesReceived.get()).isGreaterThan(10);

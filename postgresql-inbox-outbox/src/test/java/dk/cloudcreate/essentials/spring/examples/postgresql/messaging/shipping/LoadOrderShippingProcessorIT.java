@@ -58,7 +58,7 @@ public class LoadOrderShippingProcessorIT extends AbstractIntegrationTest {
         log.debug("########## TotalMessagesQueued for               '{}': '{}'", queueName, totalMessagesQueuedFor);
 
         var stopWatch = StopWatch.start();
-        Awaitility.waitAtMost(Duration.ofMinutes(60))
+        Awaitility.waitAtMost(Duration.ofMinutes(3))
                   .pollDelay(Duration.ofSeconds(5))
                   .pollInterval(Duration.ofSeconds(10))
                   .until(() -> {

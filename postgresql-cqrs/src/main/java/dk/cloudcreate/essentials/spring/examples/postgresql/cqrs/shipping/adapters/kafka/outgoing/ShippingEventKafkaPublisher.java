@@ -18,16 +18,18 @@ package dk.cloudcreate.essentials.spring.examples.postgresql.cqrs.shipping.adapt
 
 import dk.cloudcreate.essentials.components.eventsourced.eventstore.postgresql.eventstream.AggregateType;
 import dk.cloudcreate.essentials.components.eventsourced.eventstore.postgresql.processor.*;
-import dk.cloudcreate.essentials.components.foundation.messaging.MessageHandler;
+import dk.cloudcreate.essentials.components.foundation.messaging.*;
 import dk.cloudcreate.essentials.components.foundation.messaging.queue.OrderedMessage;
 import dk.cloudcreate.essentials.spring.examples.postgresql.cqrs.shipping.domain.ShippingOrders;
 import dk.cloudcreate.essentials.spring.examples.postgresql.cqrs.shipping.domain.events.OrderShipped;
+import jakarta.validation.ConstraintViolationException;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
 import java.util.List;
 
 @Service
@@ -51,6 +53,19 @@ public class ShippingEventKafkaPublisher extends EventProcessor {
     @Override
     protected List<AggregateType> reactsToEventsRelatedToAggregateTypes() {
         return List.of(ShippingOrders.AGGREGATE_TYPE);
+    }
+
+    @Override
+    protected RedeliveryPolicy getInboxRedeliveryPolicy() {
+        // Example of a custom inbox redelivery policy which doesn't perform retries in case message handling experiences a ConstraintViolationException
+        return RedeliveryPolicy.exponentialBackoff()
+                               .setInitialRedeliveryDelay(Duration.ofMillis(200))
+                               .setFollowupRedeliveryDelay(Duration.ofMillis(200))
+                               .setFollowupRedeliveryDelayMultiplier(1.1d)
+                               .setMaximumFollowupRedeliveryDelayThreshold(Duration.ofSeconds(3))
+                               .setMaximumNumberOfRedeliveries(20)
+                               .setDeliveryErrorHandler(MessageDeliveryErrorHandler.stopRedeliveryOn(ConstraintViolationException.class))
+                               .build();
     }
 
     @MessageHandler

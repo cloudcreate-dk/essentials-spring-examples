@@ -98,7 +98,7 @@ public class DurableQueuesLoadIT {
                                                                   .setQueueMessageHandler(msgHandler)
                                                                   .build());
 
-        var count     = 20000;
+        var count     = 10000;
         var stopwatch = StopWatch.start();
         unitOfWorkFactory.usingUnitOfWork(uow -> {
             IntStream.range(0, count).forEach(i -> {

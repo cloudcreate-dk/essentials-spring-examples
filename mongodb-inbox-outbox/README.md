@@ -21,7 +21,7 @@ The last command will block the current terminal, so to continue you need to ope
 #### Initiate the test scenario:
 In a new Terminal enter the following command:
 ```bash
-curl -L 'http://localhost:8080/shipping/register-order' \ 
+curl -L 'http://localhost:8080/shipping/register-order' \
 -X POST \
 -H 'Accept: application/json' \
 -H 'Content-Type: application/json' \
@@ -38,7 +38,7 @@ curl -L 'http://localhost:8080/shipping/register-order' \
 #### Complete the test scenario:
 In the same Terminal enter the following command:
 ```bash
-curl -L 'http://localhost:8080/shipping/ship-order' \ 
+curl -L 'http://localhost:8080/shipping/ship-order' \
 -H 'Accept: application/json' \
 -H 'Content-Type: application/json' \
 -d '{

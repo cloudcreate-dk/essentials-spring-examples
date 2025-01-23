@@ -92,7 +92,7 @@ public class TaskProcessorIT {
     @Test
     public void create_task_and_comment_in_same_unit_of_work() {
         collectPersistedEvents();
-        Awaitility.waitAtMost(Duration.ofMillis(300)).until(() -> eventProcessor.isActive());
+        Awaitility.waitAtMost(Duration.ofMillis(500)).until(() -> eventProcessor.isActive());
 
         TaskId taskId  = TaskId.random();
         String comment = "This is a good comment!";

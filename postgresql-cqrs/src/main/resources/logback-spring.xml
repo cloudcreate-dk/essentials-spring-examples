@@ -48,6 +48,7 @@
     <logger name="dk.cloudcreate.essentials.components.eventsourced.eventstore.postgresql.subscription.PostgresqlDurableSubscriptionRepository" level="INFO"/>
     <logger name="dk.cloudcreate.essentials.components.eventsourced.eventstore.postgresql.gap" level="INFO"/>
     <logger name="dk.cloudcreate.essentials.components.eventsourced.eventstore.postgresql.EventStore.PollingEventStream" level="INFO"/>
+    <logger name="dk.cloudcreate.essentials.components.foundation.messaging.eip.store_and_forward.Inboxes.DurableQueueBasedInboxes" level="DEBUG"/>
 
     <root level="INFO">
         <appender-ref ref="LOKI"/>

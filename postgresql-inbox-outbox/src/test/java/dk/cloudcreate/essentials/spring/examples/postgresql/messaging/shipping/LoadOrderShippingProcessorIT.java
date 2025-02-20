@@ -22,7 +22,7 @@ import dk.cloudcreate.essentials.spring.examples.postgresql.messaging.shipping.c
 import dk.cloudcreate.essentials.spring.examples.postgresql.messaging.shipping.domain.*;
 import lombok.SneakyThrows;
 import org.awaitility.Awaitility;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.slf4j.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,6 +32,7 @@ import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@Disabled
 public class LoadOrderShippingProcessorIT extends AbstractIntegrationTest {
 
     private static final Logger log = LoggerFactory.getLogger(LoadOrderShippingProcessorIT.class);

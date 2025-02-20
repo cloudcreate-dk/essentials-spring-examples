@@ -21,13 +21,13 @@ import dk.cloudcreate.essentials.components.eventsourced.eventstore.postgresql.b
 import dk.cloudcreate.essentials.components.eventsourced.eventstore.postgresql.persistence.table_per_aggregate_type.SeparateTablePerAggregateEventStreamConfiguration;
 import dk.cloudcreate.essentials.components.eventsourced.eventstore.postgresql.transaction.*;
 import dk.cloudcreate.essentials.components.foundation.reactive.command.DurableLocalCommandBus;
-import dk.cloudcreate.essentials.spring.examples.postgresql.cqrs.TestApplication;
+import dk.cloudcreate.essentials.spring.examples.postgresql.cqrs.*;
 import dk.cloudcreate.essentials.spring.examples.postgresql.cqrs.task.commands.CreateTask;
 import dk.cloudcreate.essentials.spring.examples.postgresql.cqrs.task.domain.TaskId;
 import dk.cloudcreate.essentials.spring.examples.postgresql.cqrs.task.domain.events.*;
 import lombok.extern.slf4j.Slf4j;
 import org.awaitility.Awaitility;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
@@ -44,7 +44,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Slf4j
 @Testcontainers
 @DirtiesContext
-@SpringBootTest(classes = TestApplication.class)
+@SpringBootTest(classes = {Application.class, TestConfiguration.class})
 public class TaskProcessorIT {
 
     @Container

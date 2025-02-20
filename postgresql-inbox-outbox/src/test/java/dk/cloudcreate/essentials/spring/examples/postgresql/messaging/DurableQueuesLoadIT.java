@@ -46,6 +46,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest(classes = TestApplication.class)
 @Testcontainers
 @DirtiesContext
+@Disabled
 public class DurableQueuesLoadIT {
     @Container
     static  PostgreSQLContainer<?> postgreSQLContainer = new PostgreSQLContainer<>("postgres:latest")

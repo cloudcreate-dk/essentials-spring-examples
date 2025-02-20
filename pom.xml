@@ -61,11 +61,11 @@
         <skipDependencyCheck>false</skipDependencyCheck>
 
         <!--Essentials versions-->
-        <essentials.version>0.40.20</essentials.version>
+        <essentials.version>0.40.22</essentials.version>
 
         <spring-boot.version>3.2.12</spring-boot.version>
-        <spring-framework-bom.version>6.1.16</spring-framework-bom.version>
-        <reactor-bom.version>2023.0.14</reactor-bom.version>
+        <spring-framework-bom.version>6.1.17</spring-framework-bom.version>
+        <reactor-bom.version>2023.0.15</reactor-bom.version>
         <spring-data-mongodb.version>4.2.12</spring-data-mongodb.version>
         <spring-data-jpa.version>3.2.12</spring-data-jpa.version>
         <objenesis.version>3.4</objenesis.version>
@@ -75,15 +75,15 @@
         <assertj.version>3.27.3</assertj.version>
         <mongodb-driver-sync.version>4.11.5</mongodb-driver-sync.version>
         <log4j-to-slf4j.version>2.24.3</log4j-to-slf4j.version>
-        <json-smart.version>2.5.1</json-smart.version>
+        <json-smart.version>2.5.2</json-smart.version>
         <json-path.version>2.9.0</json-path.version>
         <snakeyaml.version>2.3</snakeyaml.version>
         <micrometer.version>1.12.13</micrometer.version>
         <micrometer-tracing.version>1.2.12</micrometer-tracing.version>
-        <netty-bom.version>4.1.117.Final</netty-bom.version>
+        <netty-bom.version>4.1.118.Final</netty-bom.version>
         <junit-bom.version>5.11.4</junit-bom.version>
         <testcontainers-bom.version>1.20.4</testcontainers-bom.version>
-        <jdbi3-bom.version>3.47.0</jdbi3-bom.version>
+        <jdbi3-bom.version>3.48.0</jdbi3-bom.version>
         <jackson-bom.version>2.17.3</jackson-bom.version>
         <mockito-bom.version>5.15.2</mockito-bom.version>
         <logback.version>1.5.16</logback.version>
@@ -116,7 +116,7 @@
         <versions-maven-plugin.version>2.18.0</versions-maven-plugin.version>
         <maven-enforcer-plugin.version>3.5.0</maven-enforcer-plugin.version>
         <minimum-maven-version>3.8.8</minimum-maven-version>
-        <dependency-check-maven.version>12.0.1</dependency-check-maven.version>
+        <dependency-check-maven.version>12.1.0</dependency-check-maven.version>
         <flatten-maven-plugin.version>1.6.0</flatten-maven-plugin.version>
         <nexus-staging-maven-plugin.version>1.6.13</nexus-staging-maven-plugin.version>
         <maven-gpg-plugin.version>3.2.7</maven-gpg-plugin.version>
@@ -463,6 +463,12 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
                     <version>${maven-surefire-plugin.version}</version>
+                    <configuration>
+                        <parallel>methods</parallel>
+                        <threadCount>4</threadCount>
+                        <forkCount>2</forkCount>
+                        <reuseForks>true</reuseForks>
+                    </configuration>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -535,6 +541,12 @@
                         </goals>
                     </execution>
                 </executions>
+                <configuration>
+                    <parallel>methods</parallel>
+                    <threadCount>4</threadCount>
+                    <forkCount>2</forkCount>
+                    <reuseForks>true</reuseForks>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.owasp</groupId>

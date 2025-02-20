@@ -17,6 +17,7 @@
 package dk.cloudcreate.essentials.spring.examples.postgresql.cqrs.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import dk.cloudcreate.essentials.shared.concurrent.ThreadFactoryBuilder;
 import dk.cloudcreate.essentials.spring.examples.postgresql.cqrs.shipping.OrderShippingProcessor;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.producer.ProducerConfig;
@@ -27,8 +28,10 @@ import org.springframework.kafka.annotation.EnableKafka;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.core.*;
 import org.springframework.kafka.support.serializer.*;
+import org.springframework.scheduling.concurrent.*;
 
 import java.util.Map;
+import java.util.concurrent.Executors;
 
 @Configuration
 @EnableKafka
@@ -57,7 +60,7 @@ public class KafkaConfiguration {
         return new DefaultKafkaConsumerFactory<>(config,
                                                  new StringDeserializer(),
                                                  new JsonDeserializer<>(objectMapper)
-                                                         .trustedPackages(OrderShippingProcessor.class.getPackageName()+".*"));
+                                                         .trustedPackages(OrderShippingProcessor.class.getPackageName() + ".*"));
     }
 
     @Bean
@@ -72,6 +75,23 @@ public class KafkaConfiguration {
         ConcurrentKafkaListenerContainerFactory<String, Object> factory = new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(consumerFactory());
         factory.getContainerProperties().setObservationEnabled(true);
+        var executorService = Executors.newCachedThreadPool(ThreadFactoryBuilder.builder()
+                                                                                .daemon(true)
+                                                                                .nameFormat("Kafka-Listener-Task-Executor-%d")
+                                                                                .build());
+        var taskExecutor = new ConcurrentTaskExecutor(executorService);
+        factory.getContainerProperties().setListenerTaskExecutor(taskExecutor);
+
+        var kafkaTaskScheduler = new ThreadPoolTaskScheduler();
+        kafkaTaskScheduler.setPoolSize(1);
+        kafkaTaskScheduler.setThreadNamePrefix("kafka-scheduler-");
+        kafkaTaskScheduler.setThreadFactory(ThreadFactoryBuilder.builder()
+                                                                .daemon(true)
+                                                                .nameFormat("Kafka-Task-Scheduler-%d")
+                                                                .build());
+        kafkaTaskScheduler.initialize();
+        factory.getContainerProperties().setScheduler(kafkaTaskScheduler);
+
         return factory;
     }
 }

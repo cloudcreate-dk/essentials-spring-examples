@@ -37,9 +37,7 @@ public class ShippingEventKafkaPublisher extends AnnotatedEventHandler {
     private final Outbox kafkaOutbox;
 
     public ShippingEventKafkaPublisher(@NonNull Outboxes outboxes,
-                                       @NonNull EventBus eventBus,
-                                       @NonNull KafkaTemplate<String, Object> kafkaTemplate,
-                                       @NonNull UnitOfWorkFactory<?> unitOfWorkFactory) {
+                                       @NonNull KafkaTemplate<String, Object> kafkaTemplate) {
         // Setup the outbox to forward to Kafka
         kafkaOutbox = outboxes.getOrCreateOutbox(OutboxConfig.builder()
                                                              .setOutboxName(OutboxName.of("ShippingOrder:KafkaShippingEvents"))

@@ -28,6 +28,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 
 import java.time.Duration;
 import java.util.List;
@@ -51,6 +52,11 @@ public class ShippingEventKafkaPublisher extends EventProcessor {
     }
 
     @Override
+    protected int getNumberOfParallelInboxMessageConsumers() {
+        return 1;
+    }
+
+    @Override
     protected List<AggregateType> reactsToEventsRelatedToAggregateTypes() {
         return List.of(ShippingOrders.AGGREGATE_TYPE);
     }
@@ -64,7 +70,10 @@ public class ShippingEventKafkaPublisher extends EventProcessor {
                                .setFollowupRedeliveryDelayMultiplier(1.1d)
                                .setMaximumFollowupRedeliveryDelayThreshold(Duration.ofSeconds(3))
                                .setMaximumNumberOfRedeliveries(20)
-                               .setDeliveryErrorHandler(MessageDeliveryErrorHandler.stopRedeliveryOn(ConstraintViolationException.class))
+                               .setDeliveryErrorHandler(
+                                       MessageDeliveryErrorHandler.stopRedeliveryOn(
+                                               ConstraintViolationException.class,
+                                               HttpClientErrorException.BadRequest.class))
                                .build();
     }
 

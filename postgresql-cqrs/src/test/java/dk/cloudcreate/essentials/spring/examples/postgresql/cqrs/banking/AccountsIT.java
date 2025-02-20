@@ -19,7 +19,7 @@ package dk.cloudcreate.essentials.spring.examples.postgresql.cqrs.banking;
 import dk.cloudcreate.essentials.components.eventsourced.eventstore.postgresql.bus.*;
 import dk.cloudcreate.essentials.components.eventsourced.eventstore.postgresql.types.*;
 import dk.cloudcreate.essentials.components.foundation.transaction.*;
-import dk.cloudcreate.essentials.spring.examples.postgresql.cqrs.TestApplication;
+import dk.cloudcreate.essentials.spring.examples.postgresql.cqrs.*;
 import dk.cloudcreate.essentials.spring.examples.postgresql.cqrs.banking.domain.account.*;
 import dk.cloudcreate.essentials.spring.examples.postgresql.cqrs.banking.domain.account.events.*;
 import dk.cloudcreate.essentials.types.Amount;
@@ -29,16 +29,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.*;
-import org.testcontainers.containers.*;
-import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.*;
-import org.testcontainers.utility.DockerImageName;
 
 import java.util.ArrayList;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@SpringBootTest(classes = TestApplication.class)
+@SpringBootTest(classes = {Application.class, TestConfiguration.class})
 @Testcontainers
 @Slf4j
 @DirtiesContext

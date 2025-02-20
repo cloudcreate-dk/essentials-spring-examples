@@ -19,7 +19,7 @@ package dk.cloudcreate.essentials.spring.examples.postgresql.cqrs.banking;
 import dk.cloudcreate.essentials.components.foundation.messaging.queue.DurableQueues;
 import dk.cloudcreate.essentials.components.foundation.transaction.*;
 import dk.cloudcreate.essentials.reactive.command.CommandBus;
-import dk.cloudcreate.essentials.spring.examples.postgresql.cqrs.TestApplication;
+import dk.cloudcreate.essentials.spring.examples.postgresql.cqrs.*;
 import dk.cloudcreate.essentials.spring.examples.postgresql.cqrs.banking.commands.RequestIntraBankMoneyTransfer;
 import dk.cloudcreate.essentials.spring.examples.postgresql.cqrs.banking.domain.account.*;
 import dk.cloudcreate.essentials.spring.examples.postgresql.cqrs.banking.domain.transactions.intrabank.*;
@@ -31,16 +31,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.*;
-import org.testcontainers.containers.*;
-import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.*;
-import org.testcontainers.utility.DockerImageName;
 
 import java.time.Duration;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@SpringBootTest(classes = TestApplication.class)
+@SpringBootTest(classes = {Application.class, TestConfiguration.class})
 @Testcontainers
 @Slf4j
 @DirtiesContext
@@ -53,7 +51,7 @@ public class TransferMoneyProcessorIT {
             .withUsername("test");
 
     @Container
-    static  org.testcontainers.kafka.KafkaContainer       kafkaContainer = new org.testcontainers.kafka.KafkaContainer("apache/kafka-native:latest")
+    static org.testcontainers.kafka.KafkaContainer kafkaContainer = new org.testcontainers.kafka.KafkaContainer("apache/kafka-native:latest")
             .withEnv("KAFKA_LISTENERS", "PLAINTEXT://:9092,BROKER://:9093,CONTROLLER://:9094");
 
     @DynamicPropertySource

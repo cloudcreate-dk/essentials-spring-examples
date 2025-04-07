@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2024 the original author or authors.
+ * Copyright 2021-2025 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,21 +16,23 @@
 
 package dk.cloudcreate.essentials.spring.examples.postgresql.cqrs.shipping;
 
+import dk.cloudcreate.essentials.components.foundation.types.RandomIdGenerator;
 import dk.cloudcreate.essentials.types.CharSequenceType;
-
-import java.util.UUID;
 
 public class OrderId extends CharSequenceType<OrderId> {
 
-    protected OrderId(CharSequence value) {
+    public OrderId(String value) {
+        super(value);
+    }
+    public OrderId(CharSequence value) {
         super(value);
     }
 
     public static OrderId random() {
-        return new OrderId(UUID.randomUUID().toString());
+        return new OrderId(RandomIdGenerator.generate());
     }
 
-    public static OrderId of(CharSequence id) {
+    public static OrderId of(String id) {
         return new OrderId(id);
     }
 }

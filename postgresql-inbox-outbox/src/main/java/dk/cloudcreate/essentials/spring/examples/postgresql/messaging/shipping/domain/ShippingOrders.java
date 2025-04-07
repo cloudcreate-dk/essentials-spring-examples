@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2024 the original author or authors.
+ * Copyright 2021-2025 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,8 +18,7 @@ package dk.cloudcreate.essentials.spring.examples.postgresql.messaging.shipping.
 
 import dk.cloudcreate.essentials.spring.examples.postgresql.messaging.shipping.OrderId;
 import lombok.NonNull;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.*;
 
 import java.util.*;
 

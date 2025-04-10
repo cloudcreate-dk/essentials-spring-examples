@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2024 the original author or authors.
+ * Copyright 2021-2025 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,16 +18,12 @@ package dk.cloudcreate.essentials.spring.examples.postgresql.cqrs.task.domain;
 
 import dk.cloudcreate.essentials.components.eventsourced.aggregates.EventHandler;
 import dk.cloudcreate.essentials.components.eventsourced.aggregates.stateful.modern.AggregateRoot;
-import dk.cloudcreate.essentials.spring.examples.postgresql.cqrs.task.commands.AddComment;
-import dk.cloudcreate.essentials.spring.examples.postgresql.cqrs.task.commands.CreateTask;
-import dk.cloudcreate.essentials.spring.examples.postgresql.cqrs.task.domain.events.CommentAdded;
-import dk.cloudcreate.essentials.spring.examples.postgresql.cqrs.task.domain.events.TaskCreated;
-import dk.cloudcreate.essentials.spring.examples.postgresql.cqrs.task.domain.events.TaskEvent;
+import dk.cloudcreate.essentials.spring.examples.postgresql.cqrs.task.commands.*;
+import dk.cloudcreate.essentials.spring.examples.postgresql.cqrs.task.domain.events.*;
 import lombok.ToString;
 
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @ToString
 public class Task extends AggregateRoot<TaskId, TaskEvent, Task> {

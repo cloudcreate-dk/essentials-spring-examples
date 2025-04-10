@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--
-  ~ Copyright 2021-2024 the original author or authors.
+  ~ Copyright 2021-2025 the original author or authors.
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -49,6 +49,12 @@
     <logger name="dk.cloudcreate.essentials.components.eventsourced.eventstore.postgresql.gap" level="INFO"/>
     <logger name="dk.cloudcreate.essentials.components.eventsourced.eventstore.postgresql.EventStore.PollingEventStream" level="INFO"/>
     <logger name="dk.cloudcreate.essentials.components.foundation.messaging.eip.store_and_forward.Inboxes.DurableQueueBasedInboxes" level="DEBUG"/>
+
+    <logger name="dk.cloudcreate.essentials.components.eventsourced.eventstore.postgresql.observability.micrometer.MeasurementEventStoreSubscriptionObserver" level="DEBUG"/>
+    <logger name="dk.cloudcreate.essentials.components.eventsourced.eventstore.postgresql.interceptor.micrometer.RecordExecutionTimeEventStoreInterceptor" level="DEBUG"/>
+    <logger name="dk.cloudcreate.essentials.components.foundation.interceptor.micrometer.RecordExecutionTimeCommandBusInterceptor" level="DEBUG"/>
+    <logger name="dk.cloudcreate.essentials.components.foundation.interceptor.micrometer.RecordExecutionTimeDurableQueueInterceptor" level="DEBUG"/>
+    <logger name="dk.cloudcreate.essentials.components.foundation.interceptor.micrometer.RecordExecutionTimeMessageHandlerInterceptor" level="DEBUG"/>
 
     <root level="INFO">
         <appender-ref ref="LOKI"/>

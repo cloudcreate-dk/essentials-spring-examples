@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2024 the original author or authors.
+ * Copyright 2021-2025 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +21,10 @@ import dk.cloudcreate.essentials.types.CharSequenceType;
 
 public class TaskId extends CharSequenceType<TaskId> {
 
+    public TaskId(String value) {
+        super(value);
+    }
+
     public TaskId(CharSequence value) {
         super(value);
     }
@@ -29,7 +33,7 @@ public class TaskId extends CharSequenceType<TaskId> {
         return new TaskId(RandomIdGenerator.generate());
     }
 
-    public static TaskId of(CharSequence id) {
+    public static TaskId of(String id) {
         return new TaskId(id);
     }
 }

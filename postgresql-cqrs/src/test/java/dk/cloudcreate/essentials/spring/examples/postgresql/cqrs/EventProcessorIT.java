@@ -181,7 +181,10 @@ public class EventProcessorIT {
      * OrderId
      */
     public static class OrderId extends CharSequenceType<OrderId> {
-        protected OrderId(CharSequence value) {
+        public OrderId(String value) {
+            super(value);
+        }
+        public OrderId(CharSequence value) {
             super(value);
         }
 
@@ -189,7 +192,7 @@ public class EventProcessorIT {
             return new OrderId(RandomIdGenerator.generate());
         }
 
-        public static OrderId of(CharSequence id) {
+        public static OrderId of(String id) {
             return new OrderId(id);
         }
     }

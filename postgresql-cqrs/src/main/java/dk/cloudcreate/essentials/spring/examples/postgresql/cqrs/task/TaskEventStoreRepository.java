@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2024 the original author or authors.
+ * Copyright 2021-2025 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,8 +21,7 @@ import dk.cloudcreate.essentials.components.eventsourced.eventstore.postgresql.C
 import dk.cloudcreate.essentials.components.eventsourced.eventstore.postgresql.eventstream.AggregateType;
 import dk.cloudcreate.essentials.components.eventsourced.eventstore.postgresql.persistence.table_per_aggregate_type.SeparateTablePerAggregateEventStreamConfiguration;
 import dk.cloudcreate.essentials.spring.examples.postgresql.cqrs.task.commands.CreateTask;
-import dk.cloudcreate.essentials.spring.examples.postgresql.cqrs.task.domain.Task;
-import dk.cloudcreate.essentials.spring.examples.postgresql.cqrs.task.domain.TaskId;
+import dk.cloudcreate.essentials.spring.examples.postgresql.cqrs.task.domain.*;
 import dk.cloudcreate.essentials.spring.examples.postgresql.cqrs.task.domain.events.TaskEvent;
 import lombok.NonNull;
 import org.springframework.stereotype.Component;

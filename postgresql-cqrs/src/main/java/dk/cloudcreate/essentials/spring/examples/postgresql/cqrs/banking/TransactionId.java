@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2024 the original author or authors.
+ * Copyright 2021-2025 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,7 +25,10 @@ import java.util.UUID;
  */
 public class TransactionId extends CharSequenceType<TransactionId> {
 
-    protected TransactionId(CharSequence value) {
+    public TransactionId(String value) {
+        super(value);
+    }
+    public TransactionId(CharSequence value) {
         super(value);
     }
 
@@ -33,7 +36,7 @@ public class TransactionId extends CharSequenceType<TransactionId> {
         return new TransactionId(UUID.randomUUID().toString());
     }
 
-    public static TransactionId of(CharSequence id) {
+    public static TransactionId of(String id) {
         return new TransactionId(id);
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2024 the original author or authors.
+ * Copyright 2021-2025 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,9 +17,8 @@
 package dk.cloudcreate.essentials.spring.examples.postgresql.cqrs;
 
 import dk.cloudcreate.essentials.components.foundation.messaging.*;
-import dk.cloudcreate.essentials.components.foundation.reactive.command.DurableLocalCommandBus;
-import dk.cloudcreate.essentials.components.foundation.reactive.command.DurableLocalCommandBusBuilder;
-import dk.cloudcreate.essentials.reactive.command.*;
+import dk.cloudcreate.essentials.components.foundation.reactive.command.*;
+import dk.cloudcreate.essentials.reactive.command.SendAndDontWaitErrorHandler;
 import dk.cloudcreate.essentials.shared.Exceptions;
 import io.micrometer.observation.ObservationRegistry;
 import io.micrometer.observation.aop.ObservedAspect;

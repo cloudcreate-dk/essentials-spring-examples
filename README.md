@@ -1,5 +1,17 @@
 # Essentials Spring Example
 
+> ⚠️ **Repository Deprecated**
+>
+> This repository has been archived and is no longer maintained.
+>
+> Active development of the Essentials Project has moved to:
+> 👉 [https://github.com/trustworksdk/essentials-project](https://github.com/trustworksdk/essentials-project)
+>
+> Active development of the Essentials Spring Examples has moved to:
+> 👉 [https://github.com/trustworksdk/essentials-spring-examples](https://github.com/trustworksdk/essentials-spring-examples)
+>
+> Please update your bookmarks and issues accordingly. All future updates, improvements, and discussions will happen there.
+
 ## License
 Essentials is released under version 2.0 of the [Apache License](https://www.apache.org/licenses/LICENSE-2.0)
 
